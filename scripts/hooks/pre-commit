@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# pre-commit: regen generated docs when their inputs are staged, then
+# re-stage the regenerated files into the same commit.
+#
+# Inputs are matched against the *staged* file list (git diff --cached).
+# If a regenerator runs and changes its output, the output is added back
+# to the index so the commit captures both edits together.
+#
+# Install: `git config core.hooksPath scripts/hooks` (one-time per clone).
+# Bypass:  `git commit --no-verify` (don't make a habit of it).
+set -euo pipefail
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+# Returns 0 if any staged path matches one of the regex args.
+match() {
+    local pattern
+    for pattern in "$@"; do
+        if echo "$staged" | grep -Eq "$pattern"; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+regen() {
+    local label=$1 output=$2
+    shift 2
+    echo "pre-commit: $label inputs changed → regenerating $output"
+    "$@"
+    if ! git diff --quiet -- "$output"; then
+        git add "$output"
+        echo "pre-commit: re-staged $output"
+    fi
+}
+
+# docs/12-factor-conformance.md
+# Inputs: anything the conformance suite reads — the suite itself, every
+# command leaf, the cli kit hookups in main.go, and the schema changelog
+# (factor 12 reads it directly).
+if match \
+    '^internal/conformance/' \
+    '^internal/cmd/' \
+    '^internal/cli/' \
+    '^internal/apiversion/' \
+    '^internal/errs/' \
+    '^cmd/aim/' \
+    '^docs/schema-changelog\.md$'; then
+    regen "conformance" "docs/12-factor-conformance.md" make conformance
+fi
+
+# docs/sdk-parity.md
+# Inputs: every SDK's type files, shared fixtures, and the parity script.
+if match \
+    '^aim\.go$' \
+    '^py/' \
+    '^ts/' \
+    '^rs/' \
+    '^php/' \
+    '^testdata/(query|registry)-vectors\.json$' \
+    '^testdata/api-fixture\.json$' \
+    '^scripts/verify-sdk-parity\.sh$'; then
+    regen "sdk-parity" "docs/sdk-parity.md" make parity
+fi

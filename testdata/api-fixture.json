@@ -1,0 +1,137 @@
+{
+  "openai": {
+    "id": "openai",
+    "name": "OpenAI",
+    "doc": "https://platform.openai.com/docs",
+    "api": "https://api.openai.com/v1",
+    "npm": "@ai-sdk/openai",
+    "env": ["OPENAI_API_KEY"],
+    "models": {
+      "gpt-4o": {
+        "id": "gpt-4o",
+        "name": "GPT-4o",
+        "family": "gpt",
+        "modalities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "tool_call": true,
+        "reasoning": false,
+        "open_weights": false,
+        "attachment": true,
+        "release_date": "2024-05-13",
+        "last_updated": "2024-08-06",
+        "knowledge": "2023-10",
+        "limit": {
+          "context": 128000,
+          "input": 128000,
+          "output": 16384
+        }
+      },
+      "o3": {
+        "id": "o3",
+        "name": "o3",
+        "family": "o",
+        "modalities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "tool_call": true,
+        "reasoning": true,
+        "open_weights": false,
+        "attachment": false,
+        "release_date": "2025-04-16",
+        "last_updated": "2025-04-16",
+        "knowledge": "2024-06",
+        "limit": {
+          "context": 200000,
+          "input": 200000,
+          "output": 100000
+        }
+      }
+    }
+  },
+  "anthropic": {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "doc": "https://docs.anthropic.com",
+    "api": "https://api.anthropic.com",
+    "npm": "@ai-sdk/anthropic",
+    "env": ["ANTHROPIC_API_KEY"],
+    "models": {
+      "claude-opus-4-5": {
+        "id": "claude-opus-4-5",
+        "name": "Claude Opus 4.5",
+        "family": "claude",
+        "modalities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "tool_call": true,
+        "reasoning": false,
+        "open_weights": false,
+        "attachment": true,
+        "release_date": "2025-02-24",
+        "last_updated": "2025-02-24",
+        "knowledge": "2024-08",
+        "limit": {
+          "context": 200000,
+          "input": 200000,
+          "output": 32000
+        }
+      },
+      "claude-sonnet-4-5": {
+        "id": "claude-sonnet-4-5",
+        "name": "Claude Sonnet 4.5",
+        "family": "claude",
+        "modalities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "tool_call": true,
+        "reasoning": false,
+        "open_weights": false,
+        "attachment": true,
+        "release_date": "2025-01-17",
+        "last_updated": "2025-01-17",
+        "knowledge": "2024-04",
+        "limit": {
+          "context": 200000,
+          "input": 200000,
+          "output": 8192
+        }
+      }
+    }
+  },
+  "ollama": {
+    "id": "ollama",
+    "name": "Ollama",
+    "doc": "https://ollama.com/docs",
+    "api": "http://localhost:11434",
+    "npm": "ollama",
+    "env": [],
+    "models": {
+      "llama3.2": {
+        "id": "llama3.2",
+        "name": "Llama 3.2",
+        "family": "llama",
+        "modalities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "tool_call": false,
+        "reasoning": false,
+        "open_weights": true,
+        "attachment": false,
+        "release_date": "2024-09-25",
+        "last_updated": "2024-09-25",
+        "knowledge": "2023-12",
+        "limit": {
+          "context": 131072,
+          "input": 131072,
+          "output": 8192
+        }
+      }
+    }
+  }
+}

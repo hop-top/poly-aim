@@ -1,0 +1,44 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Editor/IDE
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Go
+vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+*.egg-info/
+dist/
+
+# TypeScript / Node
+node_modules/
+*.tsbuildinfo
+
+# Built binaries
+/bin/
+
+# Local Go workspace (kit lives in a different git root)
+go.work
+go.work.sum

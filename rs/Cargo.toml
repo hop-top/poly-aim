@@ -1,0 +1,21 @@
+[package]
+name = "hop-aim"
+version = "0.1.0-alpha.0"
+edition = "2021"
+rust-version = "1.78"
+description = "AI model registry client backed by models.dev"
+license = "MIT"
+repository = "https://github.com/hop-top/aim"
+keywords = ["ai", "llm", "registry", "models"]
+categories = ["api-bindings"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json"] }
+tokio = { version = "1", default-features = false, features = ["macros", "rt"] }
+thiserror = "2"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+wiremock = "0.6"

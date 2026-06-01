@@ -1,0 +1,128 @@
+name: CI (Generated Docs)
+
+# Safety net for contributors who don't have scripts/hooks/pre-commit
+# installed. Regenerates the auto-generated docs and fails the build if
+# the working tree changes — i.e. a PR touched generator inputs but did
+# not commit the regenerated output.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "internal/conformance/**"
+      - "internal/cmd/**"
+      - "internal/cli/**"
+      - "internal/apiversion/**"
+      - "internal/errs/**"
+      - "cmd/aim/**"
+      - "docs/schema-changelog.md"
+      - "docs/12-factor-conformance.md"
+      - "aim.go"
+      - "py/src/**"
+      - "ts/src/**"
+      - "rs/src/**"
+      - "php/src/**"
+      - "testdata/query-vectors.json"
+      - "testdata/registry-vectors.json"
+      - "testdata/api-fixture.json"
+      - "scripts/verify-sdk-parity.sh"
+      - "docs/sdk-parity.md"
+  pull_request:
+    branches: [main]
+    paths:
+      - "internal/conformance/**"
+      - "internal/cmd/**"
+      - "internal/cli/**"
+      - "internal/apiversion/**"
+      - "internal/errs/**"
+      - "cmd/aim/**"
+      - "docs/schema-changelog.md"
+      - "docs/12-factor-conformance.md"
+      - "aim.go"
+      - "py/src/**"
+      - "ts/src/**"
+      - "rs/src/**"
+      - "php/src/**"
+      - "testdata/query-vectors.json"
+      - "testdata/registry-vectors.json"
+      - "testdata/api-fixture.json"
+      - "scripts/verify-sdk-parity.sh"
+      - "docs/sdk-parity.md"
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    name: 12-factor conformance doc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - name: Regenerate docs/12-factor-conformance.md
+        run: make conformance
+
+      - name: Fail if regenerated doc differs from committed copy
+        run: |
+          if ! git diff --exit-code -- docs/12-factor-conformance.md; then
+            echo "::error::docs/12-factor-conformance.md is stale. Run 'make conformance' locally and commit the result."
+            exit 1
+          fi
+
+  parity:
+    name: SDK parity doc
+    runs-on: ubuntu-latest
+    # Don't try to regenerate here — the parity script needs every
+    # language toolchain (go/uv/node/cargo/composer). Instead, check
+    # whether any input changed in this PR and, if so, demand the
+    # generated doc moved alongside it. The pre-commit hook handles
+    # actual regeneration locally.
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Fail if inputs changed but docs/sdk-parity.md did not
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          # Resolve a usable base SHA — and only use it if the runner's
+          # local repo actually has the object. github.event.before can
+          # point to a commit that no longer exists after a force-push,
+          # which would make git diff fail with exit 128. Each candidate
+          # is verified before being accepted.
+          resolves() { git rev-parse --verify --quiet "$1^{commit}" > /dev/null; }
+          base=""
+          if [ -n "$BASE_SHA" ] && resolves "$BASE_SHA"; then
+            base="$BASE_SHA"
+          elif [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ] && resolves "$BEFORE_SHA"; then
+            base="$BEFORE_SHA"
+          elif resolves "$HEAD_SHA^"; then
+            base=$(git rev-parse "$HEAD_SHA^")
+          else
+            echo "parity doc check: no resolvable parent (initial push or orphan history); skipping."
+            exit 0
+          fi
+          echo "parity doc check: diffing $base..$HEAD_SHA"
+          changed=$(git diff --name-only "$base" "$HEAD_SHA" | sort -u)
+          # Real inputs to docs/sdk-parity.md: SDK type/source files
+          # and shared fixtures. Exclude release-please artifacts
+          # (CHANGELOG.md, version manifests) which live under the
+          # same per-SDK directories but don't affect parity content.
+          input_pattern='^(aim\.go|py/src/|ts/src/|rs/src/|php/src/|testdata/(query|registry)-vectors\.json|testdata/api-fixture\.json|scripts/verify-sdk-parity\.sh)'
+          touched_inputs=$(echo "$changed" | grep -E "$input_pattern" || true)
+          touched_doc=$(echo "$changed" | grep -E '^docs/sdk-parity\.md$' || true)
+          if [ -n "$touched_inputs" ] && [ -z "$touched_doc" ]; then
+            echo "::error::Inputs to docs/sdk-parity.md changed but the doc was not regenerated. Run 'make parity' locally and commit the result."
+            echo "Changed inputs:"
+            echo "$touched_inputs" | sed 's/^/  - /'
+            exit 1
+          fi
+          echo "parity doc check: OK"

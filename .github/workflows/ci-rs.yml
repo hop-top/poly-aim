@@ -1,0 +1,56 @@
+name: CI (Rust)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "rs/**"
+      - "testdata/query-vectors.json"
+      - "testdata/registry-vectors.json"
+      - "testdata/api-fixture.json"
+      - ".github/workflows/ci-rs.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "rs/**"
+      - "testdata/**"
+      - ".github/workflows/ci-rs.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: rs
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rs
+      - run: cargo clippy --all-targets -- -D warnings
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rs
+      - run: cargo test --all-features

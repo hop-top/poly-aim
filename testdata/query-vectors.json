@@ -1,0 +1,142 @@
+[
+  {
+    "description": "single input modality tag",
+    "input": "in:image",
+    "expected": { "Input": ["image"] }
+  },
+  {
+    "description": "single output modality tag",
+    "input": "out:text",
+    "expected": { "Output": ["text"] }
+  },
+  {
+    "description": "multi-value modality (comma-separated)",
+    "input": "in:image,video",
+    "expected": { "Input": ["image", "video"] }
+  },
+  {
+    "description": "multi-tag query",
+    "input": "in:image out:text provider:openai",
+    "expected": { "Input": ["image"], "Output": ["text"], "Provider": "openai" }
+  },
+  {
+    "description": "repeated input keys append",
+    "input": "in:image in:video",
+    "expected": { "Input": ["image", "video"] }
+  },
+  {
+    "description": "bool true",
+    "input": "tool_call:true",
+    "expected": { "ToolCall": true }
+  },
+  {
+    "description": "bool false",
+    "input": "reasoning:false",
+    "expected": { "Reasoning": false }
+  },
+  {
+    "description": "open_weights filter",
+    "input": "open_weights:true",
+    "expected": { "OpenWeights": true }
+  },
+  {
+    "description": "structured_output true",
+    "input": "structured_output:true",
+    "expected": { "StructuredOutput": true }
+  },
+  {
+    "description": "structured_output false",
+    "input": "structured_output:false",
+    "expected": { "StructuredOutput": false }
+  },
+  {
+    "description": "temperature true",
+    "input": "temperature:true",
+    "expected": { "Temperature": true }
+  },
+  {
+    "description": "temperature false",
+    "input": "temperature:false",
+    "expected": { "Temperature": false }
+  },
+  {
+    "description": "structured_output invalid bool — must return parse error",
+    "input": "structured_output:yes",
+    "error": true
+  },
+  {
+    "description": "temperature invalid bool — must return parse error",
+    "input": "temperature:1",
+    "error": true
+  },
+  {
+    "description": "cost tag is currently unknown — must return parse error",
+    "input": "cost:cheap",
+    "error": true
+  },
+  {
+    "description": "attachment tag is currently unknown — must return parse error",
+    "input": "attachment:true",
+    "error": true
+  },
+  {
+    "description": "provider tag",
+    "input": "provider:anthropic",
+    "expected": { "Provider": "anthropic" }
+  },
+  {
+    "description": "family tag",
+    "input": "family:claude",
+    "expected": { "Family": "claude" }
+  },
+  {
+    "description": "free-text (unquoted, no colon)",
+    "input": "gpt-4o",
+    "expected": { "Query": "gpt-4o" }
+  },
+  {
+    "description": "free-text is case-insensitive substring on ID + Name",
+    "input": "GPT-4O",
+    "expected": { "Query": "GPT-4O" }
+  },
+  {
+    "description": "quoted string — colons inside quotes are literal",
+    "input": "\"model:special\"",
+    "expected": { "Query": "model:special" }
+  },
+  {
+    "description": "quoted string mixed with tag",
+    "input": "provider:openai \"gpt-4o\"",
+    "expected": { "Provider": "openai", "Query": "gpt-4o" }
+  },
+  {
+    "description": "empty input returns zero Filter",
+    "input": "",
+    "expected": {}
+  },
+  {
+    "description": "bool invalid value — must return parse error",
+    "input": "tool_call:yes",
+    "error": true
+  },
+  {
+    "description": "bool value 1 — must return parse error",
+    "input": "tool_call:1",
+    "error": true
+  },
+  {
+    "description": "bool value maybe — must return parse error",
+    "input": "reasoning:maybe",
+    "error": true
+  },
+  {
+    "description": "unknown tag key — must return parse error",
+    "input": "unknown_key:value",
+    "error": true
+  },
+  {
+    "description": "malformed input (bare colon)",
+    "input": ":",
+    "error": true
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://models.dev/api-schema.json",
+  "title": "models.dev API response",
+  "description": "Authoritative wire format for models.dev/api.json. Used by all aim ports.",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/$defs/Provider"
+  },
+  "$defs": {
+    "Provider": {
+      "type": "object",
+      "required": ["id", "name", "models"],
+      "properties": {
+        "id":     { "type": "string", "description": "MUST equal the map key" },
+        "name":   { "type": "string" },
+        "doc":    { "type": "string", "format": "uri" },
+        "api":    { "type": "string", "format": "uri" },
+        "npm":    { "type": "string" },
+        "env":    { "type": "array", "items": { "type": "string" } },
+        "models": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/Model" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "Model": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id":           { "type": "string" },
+        "name":         { "type": "string" },
+        "family":       { "type": "string" },
+        "attachment":   { "type": "boolean" },
+        "reasoning":    { "type": "boolean" },
+        "tool_call":    { "type": "boolean" },
+        "open_weights": { "type": "boolean" },
+        "release_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "last_updated": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "knowledge":    { "type": "string" },
+        "modalities": {
+          "type": "object",
+          "properties": {
+            "input":  { "type": "array", "items": { "type": "string" } },
+            "output": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "limit": {
+          "type": "object",
+          "properties": {
+            "context": { "type": "integer" },
+            "input":   { "type": "integer" },
+            "output":  { "type": "integer" }
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

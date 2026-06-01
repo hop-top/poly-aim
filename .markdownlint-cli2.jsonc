@@ -1,0 +1,58 @@
+{
+  // Ignore vendored, generated, or write-once history trees.
+  "ignores": [
+    "node_modules",
+    "**/node_modules/**",
+    "vendor",
+    "**/vendor/**",
+    "target",
+    "**/target/**",
+    "dist",
+    "**/dist/**",
+    ".kit",
+    "**/.kit/**",
+    ".tlc",
+    "**/.tlc/**",
+    // Auto-generated from test runs; rule violations live in the
+    // generator template, not source-of-truth.
+    "docs/12-factor-conformance.md",
+    // Long-form design + implementation specs are append-only history;
+    // lint applies to docs going forward but not to retroactive
+    // restructuring of past decisions.
+    "docs/superpowers/**",
+    "CHANGELOG.md"
+  ],
+  "config": {
+    // Default rule set with relaxations practical for an OSS repo
+    // mixing prose docs, code-heavy README, and machine-generated reports.
+    "default": true,
+
+    // Long lines are fine for code-heavy / wide-table docs.
+    "MD013": false,
+
+    // Inline HTML allowed (kbd, br, details/summary).
+    "MD033": false,
+
+    // First-line h1 not required for partials like .tlc/tracks/.../spec.md.
+    "MD041": false,
+
+    // Allow duplicate h2/h3 across sibling sections (e.g. per-factor structure).
+    "MD024": { "siblings_only": true },
+
+    // Bare URLs are OK in dense reference docs.
+    "MD034": false,
+
+    // Table column style: GitHub renders compact + aligned + padded
+    // identically. Enforcing a single style across hand-edited tables
+    // is busywork.
+    "MD060": false,
+
+    // First h1 doesn't have to be unique across the repo (each doc
+    // file is its own context).
+    "MD025": { "front_matter_title": "" },
+
+    // Lists must be surrounded by blank lines; we already do this
+    // most places. Enforce going forward.
+    "MD032": true
+  }
+}

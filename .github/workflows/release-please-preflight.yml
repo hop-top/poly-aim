@@ -1,0 +1,27 @@
+name: release-please-preflight
+
+# Pre-merge sanity checks for the release-please + publish-on-tag setup.
+# Reports specific resolution steps when something's misconfigured.
+# Calls the org-shared reusable workflow; no aim-side logic.
+
+on:
+  pull_request:
+    paths:
+      - '.github/release-please-config.json'
+      - '.github/.release-please-manifest.json'
+      - '.github/workflows/release-please.yml'
+      - '.github/workflows/publish.yml'
+      - '.github/workflows/release-please-preflight.yml'
+      - 'pyproject.toml'
+      - 'py/pyproject.toml'
+      - 'package.json'
+      - 'ts/package.json'
+      - 'Cargo.toml'
+      - 'rs/Cargo.toml'
+      - 'composer.json'
+      - 'php/composer.json'
+  workflow_dispatch: {}
+
+jobs:
+  preflight:
+    uses: hop-top/.github/.github/workflows/release-please-preflight.yml@v0

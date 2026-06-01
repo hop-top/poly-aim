@@ -1,0 +1,28 @@
+{
+  "name": "hop-top/aim",
+  "version": "0.1.0-alpha.0",
+  "description": "AI model registry client backed by models.dev",
+  "type": "library",
+  "license": "MIT",
+  "keywords": ["ai", "llm", "registry", "models"],
+  "require": {
+    "php": ">=8.3",
+    "guzzlehttp/guzzle": "^7.8",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0",
+    "phpstan/phpstan": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "HopTop\\Aim\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HopTop\\Aim\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable"
+}

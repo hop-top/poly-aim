@@ -1,0 +1,47 @@
+[
+  {
+    "description": "no filter — all models",
+    "filter": {},
+    "expected_ids": ["anthropic/claude-opus-4-5", "anthropic/claude-sonnet-4-5", "ollama/llama3.2", "openai/gpt-4o", "openai/o3"]
+  },
+  {
+    "description": "provider filter",
+    "filter": {"Provider": "openai"},
+    "expected_ids": ["openai/gpt-4o", "openai/o3"]
+  },
+  {
+    "description": "input modality subset match",
+    "filter": {"Input": ["image"]},
+    "expected_ids": ["anthropic/claude-opus-4-5", "anthropic/claude-sonnet-4-5", "openai/gpt-4o"]
+  },
+  {
+    "description": "tristate tool_call true",
+    "filter": {"ToolCall": true},
+    "expected_ids": ["anthropic/claude-opus-4-5", "anthropic/claude-sonnet-4-5", "openai/gpt-4o", "openai/o3"]
+  },
+  {
+    "description": "tristate tool_call false",
+    "filter": {"ToolCall": false},
+    "expected_ids": ["ollama/llama3.2"]
+  },
+  {
+    "description": "AND: provider + tool_call",
+    "filter": {"Provider": "anthropic", "ToolCall": true},
+    "expected_ids": ["anthropic/claude-opus-4-5", "anthropic/claude-sonnet-4-5"]
+  },
+  {
+    "description": "open_weights true",
+    "filter": {"OpenWeights": true},
+    "expected_ids": ["ollama/llama3.2"]
+  },
+  {
+    "description": "family claude",
+    "filter": {"Family": "claude"},
+    "expected_ids": ["anthropic/claude-opus-4-5", "anthropic/claude-sonnet-4-5"]
+  },
+  {
+    "description": "reasoning true",
+    "filter": {"Reasoning": true},
+    "expected_ids": ["openai/o3"]
+  }
+]

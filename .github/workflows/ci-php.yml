@@ -1,0 +1,50 @@
+name: CI (PHP)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "php/**"
+      - "testdata/query-vectors.json"
+      - "testdata/registry-vectors.json"
+      - "testdata/api-fixture.json"
+      - ".github/workflows/ci-php.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "php/**"
+      - "testdata/**"
+      - ".github/workflows/ci-php.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: php
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+      - uses: actions/cache@v5
+        with:
+          path: php/vendor
+          key: php-${{ hashFiles('php/composer.json') }}
+      - run: composer install --no-interaction --no-progress
+      - run: vendor/bin/phpunit
+
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+      - run: composer install --no-interaction --no-progress
+      - run: vendor/bin/phpstan analyse src --level=8 --no-progress
