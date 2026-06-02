@@ -4,7 +4,12 @@
   "description": "AI model registry client backed by models.dev",
   "type": "library",
   "license": "MIT",
-  "keywords": ["ai", "llm", "registry", "models"],
+  "keywords": [
+    "ai",
+    "llm",
+    "registry",
+    "models"
+  ],
   "require": {
     "php": ">=8.3",
     "guzzlehttp/guzzle": "^7.8",
