@@ -1,5 +1,5 @@
 [package]
-name = "hop-aim"
+name = "hop-top-aim"
 version = "0.1.0-alpha.0"
 edition = "2021"
 rust-version = "1.78"

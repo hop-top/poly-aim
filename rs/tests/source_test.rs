@@ -1,6 +1,6 @@
 //! Source HTTP fetcher tests using wiremock.
 
-use hop_aim::ModelsDevSource;
+use hop_top_aim::ModelsDevSource;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 

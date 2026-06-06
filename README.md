@@ -76,10 +76,10 @@ agent-safe CLI surface lives in the Go binary.
 | Language | Path | Distribution | Status |
 |----------|------|--------------|--------|
 | Go (canonical) | `.` | `go get hop.top/aim` | `0.1.0-alpha.0` |
-| Python | `py/` | `pip install hop-aim` (planned) | `0.1.0-alpha.0` |
-| TypeScript | `ts/` | `npm install @hop-top/aim` (planned) | `0.1.0-alpha.0` |
-| Rust | `rs/` | `cargo add hop-aim` (planned) | `0.1.0-alpha.0` |
-| PHP | `php/` | `composer require hop-top/aim` (planned) | `0.1.0-alpha.0` |
+| Python | `py/` | `pip install hop-top-aim` | `0.1.0-alpha.0` |
+| TypeScript | `ts/` | `npm install @hop-top/aim` | `0.1.0-alpha.0` |
+| Rust | `rs/` | `cargo add hop-top-aim` | `0.1.0-alpha.0` |
+| PHP | `php/` | `composer require hop-top/aim` | `0.1.0-alpha.0` |
 
 Parity matrix and cross-SDK conformance: [`docs/sdk-parity.md`](docs/sdk-parity.md).
 

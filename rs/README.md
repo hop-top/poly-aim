@@ -1,4 +1,4 @@
-# hop-aim — Rust SDK
+# hop-top-aim — Rust SDK
 
 AI model registry client backed by [models.dev](https://models.dev).
 Mirrors the canonical [Go library](https://github.com/hop-top/aim).
@@ -10,7 +10,7 @@ API parity with Go HEAD `c6fccae` (post `Cost`/`StructuredOutput`/`Temperature`)
 ## Quickstart
 
 ```rust
-use hop_aim::{Filter, Registry};
+use hop_top_aim::{Filter, Registry};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
