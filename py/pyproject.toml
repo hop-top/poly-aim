@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hop-aim"
+name = "hop-top-aim"
 version = "0.1.0-alpha.1"
 description = "AI model registry client backed by models.dev"
 requires-python = ">=3.11"

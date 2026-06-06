@@ -1,6 +1,6 @@
 //! Registry filter behavior driven by shared cross-SDK vectors.
 
-use hop_aim::{Filter, Provider, Registry};
+use hop_top_aim::{Filter, Provider, Registry};
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;

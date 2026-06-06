@@ -95,9 +95,9 @@ aim/
 ├── registry.go               Registry: lazy load + filter + sort
 ├── registry_test.go
 ├── e2e_test.go
-├── py/                       hop-aim — Python SDK (httpx)
+├── py/                       hop-top-aim — Python SDK (httpx)
 ├── ts/                       @hop-top/aim — TypeScript SDK (fetch + node:test)
-├── rs/                       hop-aim — Rust crate (reqwest + tokio)
+├── rs/                       hop-top-aim — Rust crate (reqwest + tokio)
 ├── php/                      hop-top/aim — Composer package (Guzzle)
 ├── testdata/
 │   ├── query-vectors.json    cross-SDK parser truth set

@@ -36,14 +36,14 @@ jobs:
         aim-py:
           dir: py
           ecosystem: py
-          package: hop-aim
+          package: hop-top-aim
           mirror: hop-top/aim-py
           # Token auth until PyPI OIDC pending-publisher is set up.
           pypi-auth: token
         aim-rs:
           dir: rs
           ecosystem: rs
-          package: hop-aim
+          package: hop-top-aim
           mirror: hop-top/aim-rs
         aim-php:
           dir: php

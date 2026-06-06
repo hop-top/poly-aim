@@ -47,9 +47,9 @@ Until the first stable release, SDK consumers (Python, TypeScript,
 Rust, PHP) ship from this repo — pull the repo and use the per-SDK
 sources.
 
-- `py/` — `hop-aim` (Python, `uv`)
+- `py/` — `hop-top-aim` (Python, `uv`)
 - `ts/` — `@hop-top/aim` (TypeScript, native node test runner)
-- [`rs/`](../../rs/README.md) — `hop-aim` (Rust crate)
+- [`rs/`](../../rs/README.md) — `hop-top-aim` (Rust crate)
 - [`php/`](../../php/README.md) — `hop-top/aim` (Composer package)
 
 ## Verify

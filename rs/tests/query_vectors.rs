@@ -1,6 +1,6 @@
 //! Cross-SDK query parser vectors. Loaded from testdata/query-vectors.json.
 
-use hop_aim::{parse_query, Filter};
+use hop_top_aim::{parse_query, Filter};
 use serde::Deserialize;
 use std::fs;
 use std::path::PathBuf;

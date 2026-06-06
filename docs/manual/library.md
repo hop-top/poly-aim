@@ -38,10 +38,10 @@ Other languages: see the per-SDK READMEs.
 | Language | Path | Distribution |
 |----------|------|--------------|
 | Go (canonical) | `.` | `go get hop.top/aim` |
-| Python | `py/` | `pip install hop-aim` (planned) |
-| TypeScript | `ts/` | `npm install @hop-top/aim` (planned) |
-| Rust | `rs/` | `cargo add hop-aim` (planned) |
-| PHP | `php/` | `composer require hop-top/aim` (planned) |
+| Python | `py/` | `pip install hop-top-aim` |
+| TypeScript | `ts/` | `npm install @hop-top/aim` |
+| Rust | `rs/` | `cargo add hop-top-aim` |
+| PHP | `php/` | `composer require hop-top/aim` |
 
 The cross-SDK parity matrix lives in [`docs/sdk-parity.md`](../sdk-parity.md).
 
