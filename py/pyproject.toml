@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hop-aim"
-version = "0.1.0-alpha.0"
+version = "0.1.0-alpha.1"
 description = "AI model registry client backed by models.dev"
 requires-python = ">=3.11"
 dependencies = [
