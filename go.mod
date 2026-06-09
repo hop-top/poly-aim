@@ -7,7 +7,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 	go.yaml.in/yaml/v3 v3.0.4
-	hop.top/kit v0.4.0-alpha.9
+	hop.top/kit v0.5.0-alpha.0
 )
 
 require (
