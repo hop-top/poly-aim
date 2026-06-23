@@ -57,7 +57,7 @@ jobs:
     name: 12-factor conformance doc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-go@v6
         with:
@@ -82,7 +82,7 @@ jobs:
     # generated doc moved alongside it. The pre-commit hook handles
     # actual regeneration locally.
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
