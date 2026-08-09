@@ -5,6 +5,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 
@@ -15,6 +16,7 @@ import (
 	"hop.top/aim/internal/status"
 	speccli "hop.top/kit/go/ai/toolspec/cli"
 	"hop.top/kit/go/console/cli"
+	"hop.top/kit/go/console/output"
 )
 
 const aimVersion = "0.1.0"
@@ -57,9 +59,81 @@ func main() {
 	// envelope renderer and yielding inconsistent output for agents.
 	installAPIVersionGuard(root)
 
+	// After every command is mounted: unmatched positionals on group
+	// nodes become usage errors instead of cobra's help-and-exit-0.
+	hardenCommandGroups(root.Cmd)
+
 	if err := root.Execute(context.Background()); err != nil {
+		if code := exitCodeFromEnvelope(err); code != 0 {
+			os.Exit(code)
+		}
 		os.Exit(1)
 	}
+}
+
+// exitCodeFromEnvelope extracts the process exit code carried by a
+// structured [output.Error]. Returns 0 when err carries no envelope, so
+// callers fall back to the generic failure code.
+func exitCodeFromEnvelope(err error) int {
+	var ce interface{ AsCLIError() *output.Error }
+	if errors.As(err, &ce) {
+		if out := ce.AsCLIError(); out != nil && out.ExitCode != 0 {
+			return out.ExitCode
+		}
+	}
+	var oe *output.Error
+	if errors.As(err, &oe) && oe.ExitCode != 0 {
+		return oe.ExitCode
+	}
+	return 0
+}
+
+// rejectUnknownSubcommand turns unmatched positionals on a group command
+// into structured usage errors (exit 2) instead of cobra's silent
+// help-and-exit-0, which reads to an agent as a successful invocation.
+func rejectUnknownSubcommand(cmd *cobra.Command, args []string) error {
+	if len(args) == 0 {
+		return nil
+	}
+	fix := "run `" + cmd.CommandPath() + " --help` to see available commands"
+	return &output.Error{
+		Code: output.CodeUsage,
+		Message: fmt.Sprintf("unknown command %q for %q — %s",
+			args[0], cmd.CommandPath(), fix),
+		SuggestedFix: fix,
+		ExitCode:     2,
+	}
+}
+
+// runGroupHelp keeps a bare group invocation on the help path.
+func runGroupHelp(cmd *cobra.Command, _ []string) error { return cmd.Help() }
+
+// hardenCommandGroups walks the mounted tree and, for every node with
+// subcommands, keeps the bare invocation on the help path while
+// rejecting unmatched positionals as usage errors.
+//
+// Cobra only arg-validates runnable commands, so a non-runnable group
+// silently discards `aim frobnicate` and exits 0. Groups therefore gain
+// a help-rendering RunE alongside the Args validator.
+//
+// Must be called after every AddCommand: the walk only sees what is
+// already mounted. Leaves are left untouched — they own their own Args
+// contracts (show and query both take positionals).
+func hardenCommandGroups(root *cobra.Command) {
+	var walk func(*cobra.Command)
+	walk = func(cmd *cobra.Command) {
+		for _, c := range cmd.Commands() {
+			walk(c)
+		}
+		if !cmd.HasSubCommands() {
+			return
+		}
+		if !cmd.Runnable() {
+			cmd.RunE = runGroupHelp
+		}
+		cmd.Args = rejectUnknownSubcommand
+	}
+	walk(root)
 }
 
 // installAPIVersionGuard walks the root subtree and wraps every leaf

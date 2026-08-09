@@ -17,6 +17,7 @@ import (
 	"hop.top/aim/internal/status"
 	speccli "hop.top/kit/go/ai/toolspec/cli"
 	"hop.top/kit/go/console/cli"
+	"hop.top/kit/go/console/output"
 )
 
 // newTestRoot mirrors main() but disables validation + skips fang's
@@ -44,6 +45,7 @@ func newTestRoot(t *testing.T) *cli.Root {
 	)
 	require.NoError(t, speccli.RegisterSpecCommand(root, apiversion.Current))
 	installAPIVersionGuard(root)
+	hardenCommandGroups(root.Cmd)
 	root.WrapRunE()
 	return root
 }
@@ -165,3 +167,71 @@ type errorEnvelope struct {
 
 // Compile-time guard: cobra import is used by ExecuteContext flow.
 var _ = cobra.Command{}
+
+// TestUnknownCommand_IsUsageError guards the cobra-hardening pass:
+// `aim nosuchcommand` used to print help and exit 0, which tells an agent
+// its invocation succeeded. Cobra only arg-validates runnable commands,
+// so a bare group node silently swallows the unmatched positional.
+// Args validators run during cobra's argument matching, before kit's
+// RunE middleware is reached, so the failure surfaces as cobra's plain
+// "Error: <message>" line rather than a rendered JSON envelope. What
+// matters for the bug is that it is an error at all, that it carries
+// CodeUsage/ExitCode 2, and that the message names the bad argument.
+func TestUnknownCommand_IsUsageError(t *testing.T) {
+	root := newTestRoot(t)
+	_, stderr, runErr := runRoot(t, root, "nosuchcommand")
+	require.Error(t, runErr,
+		"an unknown command must not exit 0 after printing help")
+
+	var envErr *output.Error
+	require.ErrorAs(t, runErr, &envErr,
+		"the failure must carry a structured output.Error")
+	assert.Equal(t, output.CodeUsage, envErr.Code)
+	assert.Equal(t, 2, envErr.ExitCode, "usage errors exit 2")
+	assert.Contains(t, envErr.Message, "nosuchcommand",
+		"the message must name the offending argument")
+	assert.Contains(t, envErr.Message, "--help",
+		"guidance must ride in Message; SuggestedFix alone never reaches stderr")
+
+	assert.Equal(t, 2, exitCodeFromEnvelope(runErr),
+		"the resolved process exit code must be 2")
+	assert.Contains(t, stderr, "nosuchcommand",
+		"the offending argument must reach the user on stderr")
+}
+
+// TestUnknownSubcommand_IsUsageError covers nested group nodes, not just
+// the root. `status` is runnable, so cobra's own unknown-subcommand check
+// fires first; either way the invocation must fail rather than exit 0.
+func TestUnknownSubcommand_IsUsageError(t *testing.T) {
+	root := newTestRoot(t)
+	_, stderr, runErr := runRoot(t, root, "status", "nosuchsubcommand")
+	require.Error(t, runErr,
+		"an unknown subcommand under a group must not exit 0")
+	assert.Contains(t, stderr, "nosuchsubcommand",
+		"the offending argument must reach the user on stderr")
+
+	// Whatever produced it, the resolved exit code must be nonzero.
+	code := exitCodeFromEnvelope(runErr)
+	if code == 0 {
+		code = 1 // main() falls back to 1 for unstructured errors
+	}
+	assert.NotEqual(t, 0, code)
+}
+
+// TestBareRoot_StaysOnHelpPath asserts the hardening did not break the
+// help path: `aim` with no arguments must still render help and exit 0.
+func TestBareRoot_StaysOnHelpPath(t *testing.T) {
+	root := newTestRoot(t)
+	_, _, runErr := runRoot(t, root)
+	require.NoError(t, runErr,
+		"bare invocation must stay on the help path, not become a usage error")
+}
+
+// TestKnownCommandsStillDispatch is the counterweight: an over-eager
+// Args validator would reject legitimate positional arguments. `show`
+// and `query` both take them.
+func TestKnownCommandsStillDispatch(t *testing.T) {
+	root := newTestRoot(t)
+	_, _, runErr := runRoot(t, root, "status", "--format", "json")
+	require.NoError(t, runErr, "known leaf must still dispatch")
+}
