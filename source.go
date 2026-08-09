@@ -197,14 +197,39 @@ func (s *ModelsDevSource) doFetch(ctx context.Context, url string) (map[string]*
 		if p.ID != key {
 			return nil, fmt.Errorf("aim: provider map key %q != provider id %q", key, p.ID)
 		}
+	}
+	backfillProviders(raw)
+
+	return raw, nil
+}
+
+// backfillProviders populates the derived [Model.Provider] field from the
+// parent map key for every model in providers, dropping nil entries.
+//
+// Model.Provider is tagged `json:"-"` — it is not part of the models.dev wire
+// format and does not survive any JSON round trip. Every path that produces a
+// provider map from JSON (the HTTP fetch in [ModelsDevSource.doFetch] and the
+// on-disk cache load in [Cache.loadFromDisk]) must call this, or downstream
+// provider filtering and sorting silently degrade: a zero Provider makes
+// Filter.Provider match nothing at all.
+//
+// Safe to call repeatedly; it is an idempotent assignment.
+func backfillProviders(providers map[string]*Provider) {
+	for key, p := range providers {
+		if p == nil {
+			delete(providers, key)
+			continue
+		}
+		id := p.ID
+		if id == "" {
+			id = key
+		}
 		for _, m := range p.Models {
 			if m != nil {
-				m.Provider = p.ID
+				m.Provider = id
 			}
 		}
 	}
-
-	return raw, nil
 }
 
 // IsBreakerOpen reports whether err originated from a tripped [SourceBreaker].

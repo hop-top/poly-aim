@@ -39,6 +39,22 @@ aim refresh --force
 aim list
 ```
 
+#### If only `--provider` / `provider:` filters come back empty
+
+Releases before 0.1.0-alpha.3 dropped the provider field when writing the
+cache to disk, so any provider filter matched nothing from the second run
+onward — the first run after a cold cache worked, every later one returned
+zero results. `aim refresh --force` did **not** help, because the refresh
+rewrote the cache in the same lossy shape.
+
+Upgrade to 0.1.0-alpha.3 or later (see [install.md](install.md)); the fix
+re-derives the provider on load, so existing cache files start working
+without any manual step. To confirm which side of the fix you are on:
+
+```sh
+aim list --format json | jq -e '.data[0].provider != ""'
+```
+
 If `aim refresh` errors with `AIM_NETWORK` or `AIM_SOURCE_UNAVAILABLE`,
 check connectivity and the source breaker state:
 
