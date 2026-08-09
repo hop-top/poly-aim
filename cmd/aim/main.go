@@ -19,7 +19,15 @@ import (
 	"hop.top/kit/go/console/output"
 )
 
-const aimVersion = "0.1.0"
+// aimVersion is the version reported by `aim --version` and stamped into
+// the spec manifest.
+//
+// The trailing annotation is a release-please directive: the release PR
+// rewrites this literal in lock-step with .github/.release-please-manifest.json,
+// so the binary can never again drift from the released version. There is
+// no ldflags injection point to use instead — the Go entry in publish.yml
+// is mirror-only and builds no binary.
+const aimVersion = "0.1.0-alpha.2" // x-release-please-version
 
 func main() {
 	root := cli.New(cli.Config{

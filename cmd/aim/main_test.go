@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -234,4 +236,28 @@ func TestKnownCommandsStillDispatch(t *testing.T) {
 	root := newTestRoot(t)
 	_, _, runErr := runRoot(t, root, "status", "--format", "json")
 	require.NoError(t, runErr, "known leaf must still dispatch")
+}
+
+// TestVersionMatchesReleaseManifest pins the compiled-in version to the
+// release-please manifest. The binary previously reported a hardcoded
+// v0.1.0 while the manifest said 0.1.0-alpha.2, so `aim --version` told
+// agents something no release had ever produced.
+//
+// There is no ldflags injection point — the Go entry in publish.yml is
+// mirror-only and builds no binary — so the constant carries an
+// x-release-please-version annotation and is rewritten by the release PR.
+// This test is what proves the annotation is still wired up.
+func TestVersionMatchesReleaseManifest(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "..", ".github", ".release-please-manifest.json"))
+	require.NoError(t, err, "release-please manifest must be readable")
+
+	var manifest map[string]string
+	require.NoError(t, json.Unmarshal(raw, &manifest))
+
+	want, ok := manifest["."]
+	require.True(t, ok, `manifest must carry a "." entry for the Go module`)
+	assert.Equal(t, want, aimVersion,
+		"aimVersion drifted from the release manifest; the "+
+			"x-release-please-version annotation on the constant and the "+
+			"extra-files entry in release-please-config.json keep these in sync")
 }

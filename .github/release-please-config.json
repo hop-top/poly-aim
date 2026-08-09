@@ -26,7 +26,8 @@
       "prerelease": true,
       "prerelease-type": "alpha.0",
       "versioning": "prerelease",
-      "initial-version": "0.1.0-alpha.0"
+      "initial-version": "0.1.0-alpha.0",
+      "extra-files": ["cmd/aim/main.go"]
     },
     "py": {
       "release-type": "python",
