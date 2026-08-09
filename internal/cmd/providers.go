@@ -57,7 +57,7 @@ Examples:
 				}
 			}
 			meta := provenanceFromCache(reg.Cache(), reg.SourceURL())
-			return output.Render(cmd.OutOrStdout(), format, rows, output.WithProvenance(meta))
+			return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, rows, meta)
 		},
 	}
 

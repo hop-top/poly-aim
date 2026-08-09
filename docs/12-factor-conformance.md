@@ -19,7 +19,7 @@ Summary: **12/12 PASS** — 0 failing
 |---|--------|------|------|--------|----------|
 | 1 | Capability Introspection | MUST | `TestFactor1Introspection` | PASS | cmd/aim/main.go RegisterSpecCommand; per-leaf cli.SetOutputSchema/Examples/NextSteps |
 | 2 | Intent Clarity | MUST | `TestFactor2Intent` | PASS | internal/cmd/list.go positional warning; internal/cmd/show.go flag aliases |
-| 3 | Structured I/O | MUST | `TestFactor3StructuredIO` | PASS | internal/cmd/* output.Render with WithProvenance; envelopeWithWarnings |
+| 3 | Structured I/O | MUST | `TestFactor3StructuredIO`, `TestAllDeclaredFormatsEmitOutput` | PASS | internal/cmd/renderEnvelope splits inline-envelope (json/yaml) from flat tag-driven formats (csv/text/human, provenance via stderr footer); envelopeWithWarnings |
 | 4 | Structured Error Recovery | MUST | `TestFactor4Errors` | PASS | internal/errs/errs.go constructors; kit WrapRunE renderer |
 | 5 | Capability Contracts | MUST | `TestFactor5Contracts` | PASS | per-leaf cli.SetSideEffect/Idempotency/OutputSchema/Examples |
 | 6 | Preview & Explain | SHOULD | `TestFactor6Preview` | PASS | internal/cmd/refresh.go runRefreshDryRun; internal/cmd/query.go --explain |

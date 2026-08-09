@@ -79,7 +79,7 @@ Examples:
 					meta.Source, meta.FetchedAt.Format(time.RFC3339), meta.Method)
 				return nil
 			}
-			return output.Render(cmd.OutOrStdout(), format, payload, output.WithProvenance(meta))
+			return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, payload, meta)
 		},
 	}
 
@@ -224,7 +224,7 @@ func runRefreshDryRun(cmd *cobra.Command, format output.Format, force bool) erro
 			prov.Source, prov.FetchedAt.Format(time.RFC3339), prov.Method)
 		return nil
 	}
-	return output.Render(cmd.OutOrStdout(), format, preview, output.WithProvenance(prov))
+	return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, preview, prov)
 }
 
 // refreshCacheDir extracts the cache directory from an [*aim.Cache]
