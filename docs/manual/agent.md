@@ -97,22 +97,29 @@ Every error returns the same shape on stderr:
   "cause": "nope",
   "suggested_fix": "run `aim providers` to list valid provider IDs",
   "alternatives": ["aim providers", "aim list"],
-  "exit_code": 64
+  "exit_code": 3
 }
 ```
 
 Stable error codes (see [`internal/errs/errs.go`](../../internal/errs/errs.go)
 for the full catalog):
 
-| Code | Meaning |
-|------|---------|
-| `NOT_FOUND` | Provider or model not in the cache |
-| `INVALID_QUERY` | Query DSL syntax error |
-| `AIM_INVALID_FLAG` | Unsupported `--api-version`, invalid flag value |
-| `AIM_NETWORK` | Transport-level failure on source fetch |
-| `AIM_CACHE_CORRUPT` | Cache file present but unparseable |
-| `AIM_SOURCE_UNAVAILABLE` | Source breaker open after repeated failures |
-| `AIM_CACHE_LOCKED` | Concurrent writer holds the cache lock |
+| Code | Exit | Meaning |
+|------|------|---------|
+| `NOT_FOUND` | 3 | Provider or model not in the cache |
+| `INVALID_QUERY` | 2 | Query DSL syntax error |
+| `AIM_INVALID_FLAG` | 2 | Unsupported `--api-version`, invalid flag value |
+| `AIM_NETWORK` | 6 | Transport-level failure on source fetch |
+| `AIM_CACHE_CORRUPT` | 1 | Cache file present but unparseable |
+| `AIM_SOURCE_UNAVAILABLE` | 6 | Source breaker open after repeated failures |
+| `AIM_CACHE_LOCKED` | 4 | Concurrent writer holds the cache lock |
+
+The process exit code always matches the envelope's `exit_code`. Codes
+follow the shared taxonomy — 0 success, 1 general, 2 usage, 3 not-found,
+4 conflict, 5 permission, 6 transient/retryable, 64 rate-limited — so
+exit 6 means "back off and retry the same invocation", while 1–4 mean
+"retrying unchanged will fail again". Per-command exit classes are
+published in `aim spec --format json` under `commands[].exit_codes`.
 
 `suggested_fix` and `alternatives` are deliberately **runnable** — an
 agent can shell out to the suggestion without further parsing.

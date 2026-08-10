@@ -107,7 +107,7 @@ func extractEnvelope(t *testing.T, s string) map[string]any {
 }
 
 // TestE2E_ShowNotFound_ProviderEnvelope — `aim show nope nope --format json`
-// emits NOT_FOUND with exit 1.
+// emits NOT_FOUND with exit 3.
 func TestE2E_ShowNotFound_ProviderEnvelope(t *testing.T) {
 	primeCache(t)
 	root := buildRoot(t)
@@ -124,13 +124,13 @@ func TestE2E_ShowNotFound_ProviderEnvelope(t *testing.T) {
 	assert.Equal(t, "NOT_FOUND", env["code"])
 	assert.Contains(t, env["message"], "provider not found")
 	assert.Contains(t, env["message"], "nonexistent_provider")
-	// ExitCode 1 marshals as float64 via encoding/json.
-	assert.Equal(t, float64(1), env["exit_code"])
+	// ExitCode 3 (not-found) marshals as float64 via encoding/json.
+	assert.Equal(t, float64(3), env["exit_code"])
 	assert.NotEmpty(t, env["suggested_fix"])
 }
 
 // TestE2E_QueryInvalid_Envelope — `aim query 'bogus:::syntax' --format json`
-// emits INVALID_QUERY with exit 64.
+// emits INVALID_QUERY with exit 2.
 func TestE2E_QueryInvalid_Envelope(t *testing.T) {
 	primeCache(t)
 	root := buildRoot(t)
@@ -146,7 +146,7 @@ func TestE2E_QueryInvalid_Envelope(t *testing.T) {
 	env := extractEnvelope(t, buf.String())
 	assert.Equal(t, "INVALID_QUERY", env["code"])
 	assert.Contains(t, env["message"], "invalid query")
-	assert.Equal(t, float64(64), env["exit_code"])
+	assert.Equal(t, float64(2), env["exit_code"])
 	assert.NotEmpty(t, env["cause"])
 }
 

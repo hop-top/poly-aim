@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -78,7 +79,7 @@ func TestAPIVersion_UnsupportedBelow_EmitsEnvelope(t *testing.T) {
 	assert.Contains(t, envelope.Cause, "0.9")
 	assert.Contains(t, envelope.Cause, "1.0",
 		"the cause must enumerate the Supported set")
-	assert.Equal(t, 64, envelope.ExitCode)
+	assert.Equal(t, 2, envelope.ExitCode)
 }
 
 func TestAPIVersion_UnsupportedAbove_EmitsEnvelope(t *testing.T) {
@@ -167,6 +168,20 @@ type errorEnvelope struct {
 	ExitCode     int      `json:"exit_code"`
 }
 
+// TestExitCode_ResolvesEnvelopeCodes — the process exit code mirrors
+// the envelope's classified code; bare errors fall back to general (1).
+func TestExitCode_ResolvesEnvelopeCodes(t *testing.T) {
+	assert.Equal(t, 0, exitCode(nil))
+	assert.Equal(t, 3, exitCode(errs.NotFound("provider", "x")))
+	assert.Equal(t, 2, exitCode(errs.InvalidQuery("e", errors.New("c"))))
+	assert.Equal(t, 2, exitCode(errs.InvalidFlag("f", "v", "d")))
+	assert.Equal(t, 6, exitCode(errs.Network("http://x", errors.New("c"))))
+	assert.Equal(t, 6, exitCode(errs.SourceUnavailable("http://x", errors.New("c"))))
+	assert.Equal(t, 4, exitCode(errs.CacheLocked("/p")))
+	assert.Equal(t, 1, exitCode(errs.CacheCorrupt("/p", errors.New("c"))))
+	assert.Equal(t, 1, exitCode(errors.New("bare")))
+}
+
 // Compile-time guard: cobra import is used by ExecuteContext flow.
 var _ = cobra.Command{}
 
@@ -195,7 +210,7 @@ func TestUnknownCommand_IsUsageError(t *testing.T) {
 	assert.Contains(t, envErr.Message, "--help",
 		"guidance must ride in Message; SuggestedFix alone never reaches stderr")
 
-	assert.Equal(t, 2, exitCodeFromEnvelope(runErr),
+	assert.Equal(t, 2, exitCode(runErr),
 		"the resolved process exit code must be 2")
 	assert.Contains(t, stderr, "nosuchcommand",
 		"the offending argument must reach the user on stderr")
@@ -213,11 +228,7 @@ func TestUnknownSubcommand_IsUsageError(t *testing.T) {
 		"the offending argument must reach the user on stderr")
 
 	// Whatever produced it, the resolved exit code must be nonzero.
-	code := exitCodeFromEnvelope(runErr)
-	if code == 0 {
-		code = 1 // main() falls back to 1 for unstructured errors
-	}
-	assert.NotEqual(t, 0, code)
+	assert.NotEqual(t, 0, exitCode(runErr))
 }
 
 // TestBareRoot_StaysOnHelpPath asserts the hardening did not break the

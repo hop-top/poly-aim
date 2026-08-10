@@ -72,28 +72,31 @@ func main() {
 	hardenCommandGroups(root.Cmd)
 
 	if err := root.Execute(context.Background()); err != nil {
-		if code := exitCodeFromEnvelope(err); code != 0 {
-			os.Exit(code)
-		}
-		os.Exit(1)
+		os.Exit(exitCode(err))
 	}
 }
 
-// exitCodeFromEnvelope extracts the process exit code carried by a
-// structured [output.Error]. Returns 0 when err carries no envelope, so
-// callers fall back to the generic failure code.
-func exitCodeFromEnvelope(err error) int {
+// exitCode resolves the process exit code for an error returned by
+// Execute. Structured envelopes (and wrappers exposing AsCLIError)
+// carry their own classified code from the shared taxonomy — 0 success,
+// 1 general, 2 usage, 3 not-found, 4 conflict, 5 permission,
+// 6 transient/retryable, 64 rate-limited. Anything else is a general
+// failure (1).
+func exitCode(err error) int {
+	if err == nil {
+		return 0
+	}
 	var ce interface{ AsCLIError() *output.Error }
 	if errors.As(err, &ce) {
-		if out := ce.AsCLIError(); out != nil && out.ExitCode != 0 {
-			return out.ExitCode
+		if e := ce.AsCLIError(); e != nil && e.ExitCode != 0 {
+			return e.ExitCode
 		}
 	}
 	var oe *output.Error
 	if errors.As(err, &oe) && oe.ExitCode != 0 {
 		return oe.ExitCode
 	}
-	return 0
+	return 1
 }
 
 // rejectUnknownSubcommand turns unmatched positionals on a group command

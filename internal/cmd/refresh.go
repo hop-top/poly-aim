@@ -89,6 +89,7 @@ Examples:
 	cli.SetSideEffect(cmd, cli.SideEffectWriteLocal)
 	cli.SetIdempotency(cmd, cli.IdempotencyYes)
 	cli.SetTopLevelVerb(cmd)
+	setExitCodes(cmd, exitCodesRead)
 	_ = cli.SetOutputSchema(cmd, cli.OutputSchema{
 		Type:    &refreshStatus{},
 		Version: SchemaVersion,

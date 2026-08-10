@@ -171,13 +171,23 @@ Every error returns a structured payload on stderr:
   "message": "provider not found: nope",
   "suggested_fix": "run `aim providers` to list valid provider IDs",
   "alternatives": ["aim providers", "aim list", "aim refresh"],
-  "exit_code": 64
+  "exit_code": 3
 }
 ```
 
 Stable code catalog: see [agent.md](agent.md#error-envelope). Source
-of truth: [`internal/errs/errs.go`](../../internal/errs/errs.go). Exit
-codes follow `sysexits.h`.
+of truth: [`internal/errs/errs.go`](../../internal/errs/errs.go).
+
+The process exits with the envelope's `exit_code`:
+
+| Exit | Class | aim codes |
+|------|-------|-----------|
+| 0 | success | — |
+| 1 | general | `AIM_CACHE_CORRUPT`, unclassified errors |
+| 2 | usage | `INVALID_QUERY`, `AIM_INVALID_FLAG` |
+| 3 | not-found | `NOT_FOUND` |
+| 4 | conflict | `AIM_CACHE_LOCKED` |
+| 6 | transient (retry) | `AIM_NETWORK`, `AIM_SOURCE_UNAVAILABLE` |
 
 ## Related
 
