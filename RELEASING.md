@@ -106,21 +106,23 @@ and routes to the appropriate per-ecosystem reusable workflow.
 
 | Tag pattern      | Routed to          | Action                                              |
 |------------------|--------------------|-----------------------------------------------------|
-| `aim/v*`         | `notify-vanity`    | Refresh hop.top vanity URL; proxy.golang.org serves the tag |
+| `aim/v*`         | (mirror only)      | Subtree-push to `hop-top/aim`; proxy.golang.org + the hop.top vanity resolver serve from the mirror |
 | `aim-py/v*`      | `publish-py.yml`   | Build + publish to PyPI via token auth              |
 | `aim-ts/v*`      | `publish-ts.yml`   | `pnpm publish` to npm (aim's ts uses `--no-frozen-lockfile`) |
 | `aim-rs/v*`      | `publish-rs.yml`   | `cargo publish` to crates.io                        |
 | `aim-php/v*`     | (mirror + notify)  | Subtree-push to mirror, then notify Packagist       |
 
-Every SDK component also gets a subtree push to a read-only mirror
-repo (`hop-top/aim-py`, `hop-top/aim-ts`, etc.) so consumers can
-target the language-specific repo directly. The Go canonical
-(`aim`) is its own "mirror" — `dir: .` and the repo itself is
-the mirror target.
+Every component gets a subtree push to a read-only mirror repo so
+consumers can target the language-specific repo directly:
+`hop-top/aim-py`, `hop-top/aim-ts`, etc.; Go takes the bare name
+(`hop-top/aim` — the module URL is the repo path). The hop.top
+vanity worker always resolves `go get hop.top/aim` to the mirror —
+no repo-side notify step (the old `notify-vanity` mechanism is
+retired).
 
 Mirror push is gated on publish success: if `publish-rs` fails,
-`mirror` does not run, and `notify-vanity` (Go) / Packagist notify
-(PHP) are short-circuited.
+`mirror` does not run, and the Packagist notify (PHP) is
+short-circuited.
 
 `publish.yml` also supports `workflow_dispatch` to re-run a publish
 for an existing tag without re-pushing it. Caveat: dispatch replays
@@ -136,7 +138,7 @@ the secret is in place.
 
 | Secret                     | Required for                | Provisioned at |
 |----------------------------|-----------------------------|----------------|
-| `RELEASE_BOT_APP_ID`       | `release-please.yml`, `release-tag.yml`, `aim/v*` vanity-URL refresh | hop-top org App registration |
+| `RELEASE_BOT_APP_ID`       | `release-please.yml`, `release-tag.yml` (NOT `publish.yml` — the reusable no longer declares it) | hop-top org App registration |
 | `RELEASE_BOT_PRIVATE_KEY`  | same as `RELEASE_BOT_APP_ID` | hop-top org App private key |
 | `GH_MIRROR_PAT`            | Mirror subtree push (all SDK components) | GitHub PAT with `repo` + `workflow` on mirror repos |
 | `PYPI_REGISTRY_TOKEN`      | `aim-py/v*`                 | [pypi.org](https://pypi.org/manage/account/token/) |
