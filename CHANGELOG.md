@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0-alpha.4](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.3...aim/v0.1.0-alpha.4) (2026-08-30)
+
+
+### Bug Fixes
+
+* **publish:** drop retired RELEASE_BOT secrets from caller ([#37](https://github.com/hop-top/poly-aim/issues/37)) ([2987576](https://github.com/hop-top/poly-aim/commit/2987576d06b041f1538870e41292581011b008f5))
+
 ## [0.1.0-alpha.3](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.2...aim/v0.1.0-alpha.3) (2026-08-30)
 
 

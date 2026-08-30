@@ -27,7 +27,7 @@ import (
 // so the binary can never again drift from the released version. There is
 // no ldflags injection point to use instead — the Go entry in publish.yml
 // is mirror-only and builds no binary.
-const aimVersion = "0.1.0-alpha.3" // x-release-please-version
+const aimVersion = "0.1.0-alpha.4" // x-release-please-version
 
 func main() {
 	root := cli.New(cli.Config{
