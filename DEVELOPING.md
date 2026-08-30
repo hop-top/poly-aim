@@ -13,6 +13,11 @@ Pick the path that matches what you're touching:
 you need: Go 1.26+, Python 3.11+ (`uv`), Node 22+ (with `--experimental-strip-types`),
 Rust stable (`rustup`), PHP 8.2+ with Composer.
 
+Host lint tooling (golangci-lint, shellcheck, markdownlint-cli2) is
+pinned in `mise.toml` at versions matching CI — `mise install`
+provisions all three. The lint targets soft-skip with a hint when a
+tool is missing, but findings can drift from CI on unpinned versions.
+
 **Devcontainer (recommended for multi-language work)** — boots a
 preconfigured environment with every toolchain:
 
@@ -20,7 +25,9 @@ preconfigured environment with every toolchain:
 make dev-up           # build + start the container (idempotent)
 make dev-exec         # interactive shell inside
 make dev-down         # stop + remove (image cache preserved)
-make dev-rebuild      # force fresh image build after Dockerfile edits
+make dev-rebuild      # force fresh build after devcontainer.json edits
+make dev-status       # show container state
+make dev-logs         # tail the container logs
 ```
 
 Run any Make target inside the container:

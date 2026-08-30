@@ -1,0 +1,10 @@
+# Host tooling for the Makefile's lint gates. `mise install` provisions
+# everything the soft-fallback hints in the Makefile reference.
+#
+# golangci-lint MUST stay in lock-step with .github/workflows/ci.yml
+# (golangci-lint-action `version:`) — a drifted local version silently
+# disagrees with CI on findings.
+[tools]
+golangci-lint = "2.12.2"
+shellcheck = "0.10"
+"npm:markdownlint-cli2" = "0.23.2"

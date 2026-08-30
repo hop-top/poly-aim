@@ -89,11 +89,13 @@ lint-md:
 	@if command -v markdownlint-cli2 >/dev/null 2>&1; then \
 		markdownlint-cli2 "**/*.md"; \
 	else \
-		echo "lint-md: markdownlint-cli2 not installed; 'brew install markdownlint-cli2' to enable"; \
+		echo "lint-md: markdownlint-cli2 not installed; 'mise install' to enable"; \
 	fi
 
 # YAML: parse-level check via python3 (yamllint is optional; not on every box).
 lint-yaml:
+	@python3 -c "import yaml" 2>/dev/null || \
+		{ echo "lint-yaml: PyYAML not importable from python3; 'pip3 install pyyaml' to enable"; exit 0; }
 	@python3 -c "import sys, yaml, pathlib; \
 		paths = [p for p in pathlib.Path('.').rglob('*.y*ml') if not any(x in p.parts for x in ('node_modules','vendor','target','dist','.kit'))]; \
 		[yaml.safe_load(p.read_text()) for p in paths]; \
@@ -104,7 +106,7 @@ lint-sh:
 	@if command -v shellcheck >/dev/null 2>&1; then \
 		shellcheck scripts/*.sh .devcontainer/post-create.sh; \
 	else \
-		echo "lint-sh: shellcheck not installed; 'brew install shellcheck' to enable"; \
+		echo "lint-sh: shellcheck not installed; 'mise install' to enable"; \
 	fi
 
 lint-docs: lint-md lint-yaml lint-sh
@@ -118,7 +120,7 @@ lint-docs: lint-md lint-yaml lint-sh
 RELEASE_PLEASE := npx -y release-please@latest
 RELEASE_CONFIG := .github/release-please-config.json
 RELEASE_MANIFEST := .github/.release-please-manifest.json
-RELEASE_REPO := hop-top/aim
+RELEASE_REPO := hop-top/poly-aim
 
 # release-dry shows what release PRs release-please WOULD open against
 # main right now. Requires GITHUB_TOKEN with repo:read scope — without
@@ -194,7 +196,8 @@ dev-down:
 	@cid=$$(docker ps -aq --filter "label=devcontainer.local_folder=$$PWD"); \
 	if [ -n "$$cid" ]; then docker rm -f $$cid; else echo "dev-down: no container for $$PWD"; fi
 
-# dev-rebuild forces a fresh image build. Use after editing Dockerfile.
+# dev-rebuild forces a fresh container build. Use after editing
+# .devcontainer/devcontainer.json (features, versions).
 dev-rebuild:
 	@command -v docker >/dev/null 2>&1 || { echo "dev-rebuild: docker is required"; exit 1; }
 	$(MAKE) dev-down
