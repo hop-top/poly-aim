@@ -93,7 +93,8 @@ Parity matrix and cross-SDK conformance: [`docs/sdk-parity.md`](docs/sdk-parity.
   auto-generated conformance report.
 - [`docs/schema-changelog.md`](docs/schema-changelog.md) — supported
   `--api-version` values and deprecation policy.
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — local development.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution flow.
+- [`DEVELOPING.md`](DEVELOPING.md) — local development environment.
 - [`RELEASING.md`](RELEASING.md) — version cuts via release-please.
 
 ## Contributing
@@ -109,7 +110,8 @@ make check-all       # full pre-merge gate
 
 Multi-language work: `make dev-up` boots a devcontainer with every
 toolchain (Go, Python `uv`, Node, Rust, PHP). Requires Docker. Full
-guide in [CONTRIBUTING.md](CONTRIBUTING.md).
+environment guide in [DEVELOPING.md](DEVELOPING.md); contribution
+flow in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Sponsors
 
