@@ -28,8 +28,11 @@ test-verbose:
 
 lint lint-go:
 	go vet ./...
-	@command -v golangci-lint >/dev/null 2>&1 && golangci-lint run ./... || \
-		echo "lint-go: golangci-lint not installed (CI uses v2.12.2); 'mise install' to enable"
+	@if command -v golangci-lint >/dev/null 2>&1; then \
+		golangci-lint run ./...; \
+	else \
+		echo "lint-go: golangci-lint not installed (CI uses v2.12.2); 'mise install' to enable"; \
+	fi
 
 smoke:
 	go test -tags smoke ./...
