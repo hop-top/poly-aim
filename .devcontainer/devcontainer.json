@@ -18,7 +18,7 @@
       "components": "rust-analyzer,rust-src,rustfmt,clippy"
     },
     "ghcr.io/devcontainers/features/php:1": {
-      "version": "8.2",
+      "version": "8.3",
       "installComposer": true
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
