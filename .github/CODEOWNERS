@@ -1,0 +1,8 @@
+# Generated — managed centrally; do not edit here.
+# Guardrail-minimal: only release-please-managed paths, owned by the release team.
+# No `*` fallback — pairs with the production-branch-guardrail ruleset
+# (0 required approvals + code-owner review) so release PRs need explicit
+# release-team approval while everything else auto-merges freely.
+release-please-config.json     @hop-top/release
+.release-please-manifest.json  @hop-top/release
+CHANGELOG.md                   @hop-top/release
