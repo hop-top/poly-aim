@@ -336,3 +336,84 @@ func TestCache_HTTPServer_Integration(t *testing.T) {
 	assert.NotNil(t, providers)
 	assert.Equal(t, 1, calls)
 }
+
+// TestCache_DiskRoundTrip_BackfillsProvider is the regression guard for the
+// warm-cache provider-filter bug: Model.Provider is tagged `json:"-"`, so it
+// never survives a serialise/deserialise cycle through the on-disk payload.
+// The HTTP path backfills it from the parent map key; the disk-load path must
+// do the same or every --provider filter silently matches nothing on the
+// second and subsequent runs.
+//
+// This exercises the real disk path (write, then read back through a
+// separately-constructed Cache) rather than an in-memory fake, because the
+// in-memory fakes are precisely what let this ship.
+func TestCache_DiskRoundTrip_BackfillsProvider(t *testing.T) {
+	dir := t.TempDir()
+	data := singleProviderData()
+	src := newStaticSource(data)
+
+	// First run: cold cache, fetch from source and persist to disk.
+	c1 := NewCache(src, WithCacheDir(dir), WithTTL(time.Hour))
+	first, err := c1.Refresh(context.Background(), true)
+	require.NoError(t, err)
+	require.NotNil(t, first["acme"])
+	require.NotNil(t, first["acme"].Models["m1"])
+	assert.Equal(t, "acme", first["acme"].Models["m1"].Provider,
+		"cold fetch must populate Provider")
+
+	// Confirm the on-disk payload really did drop the field — this is the
+	// precondition that makes the backfill necessary rather than incidental.
+	raw, err := os.ReadFile(filepath.Join(dir, filePayload))
+	require.NoError(t, err)
+	assert.NotContains(t, string(raw), `"provider"`,
+		"payload is expected to omit provider (json:\"-\"); "+
+			"if this fails the tag changed and this test needs revisiting")
+
+	// Second run: a brand-new Cache reading the warm on-disk cache.
+	c2 := NewCache(newStaticSource(data), WithCacheDir(dir), WithTTL(time.Hour))
+	warm, err := c2.Refresh(context.Background(), false)
+	require.NoError(t, err)
+	require.NotNil(t, warm["acme"])
+	require.NotNil(t, warm["acme"].Models["m1"])
+	assert.Equal(t, "acme", warm["acme"].Models["m1"].Provider,
+		"warm disk load must backfill Provider from the parent map key")
+
+	// Load() is the other disk-read entry point and must backfill too.
+	loaded, err := c2.Load()
+	require.NoError(t, err)
+	require.NotNil(t, loaded["acme"])
+	require.NotNil(t, loaded["acme"].Models["m1"])
+	assert.Equal(t, "acme", loaded["acme"].Models["m1"].Provider,
+		"Load must backfill Provider from the parent map key")
+}
+
+// TestRegistry_WarmCache_ProviderFilterMatches is the end-to-end guard: the
+// user-visible symptom was `aim list --provider openai` returning 38 models on
+// a cold cache and 0 on a warm one. Assert the filter returns identical
+// results across both, driving a Registry through a real on-disk cache dir.
+func TestRegistry_WarmCache_ProviderFilterMatches(t *testing.T) {
+	dir := t.TempDir()
+	data := singleProviderData()
+
+	cold := NewRegistry(
+		WithSource(newStaticSource(data)),
+		WithCacheOpts(WithCacheDir(dir), WithTTL(time.Hour)),
+	)
+	coldModels, err := cold.Models(context.Background(), Filter{Provider: "acme"})
+	require.NoError(t, err)
+	require.Len(t, coldModels, 1, "cold cache must match the provider filter")
+	assert.Equal(t, "acme", coldModels[0].Provider)
+
+	// Fresh Registry over the now-warm cache dir: no source call should be
+	// needed, and the provider filter must still match.
+	warm := NewRegistry(
+		WithSource(newStaticSource(data)),
+		WithCacheOpts(WithCacheDir(dir), WithTTL(time.Hour)),
+	)
+	warmModels, err := warm.Models(context.Background(), Filter{Provider: "acme"})
+	require.NoError(t, err)
+	assert.Len(t, warmModels, 1,
+		"warm cache must match the provider filter (was 0 before the backfill fix)")
+	assert.Equal(t, coldModels, warmModels,
+		"cold and warm results must be identical")
+}

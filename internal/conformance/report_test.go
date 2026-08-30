@@ -26,7 +26,9 @@ var reportRows = []reportRow{
 	{2, "Intent Clarity", "MUST", "TestFactor2Intent",
 		"internal/cmd/list.go positional warning; internal/cmd/show.go flag aliases"},
 	{3, "Structured I/O", "MUST", "TestFactor3StructuredIO",
-		"internal/cmd/* output.Render with WithProvenance; envelopeWithWarnings"},
+		"internal/cmd/renderEnvelope splits inline-envelope (json/yaml) from " +
+			"flat tag-driven formats (csv/text/human, provenance via stderr footer); " +
+			"envelopeWithWarnings; TestAllDeclaredFormatsEmitOutput pins every declared format"},
 	{4, "Structured Error Recovery", "MUST", "TestFactor4Errors",
 		"internal/errs/errs.go constructors; kit WrapRunE renderer"},
 	{5, "Capability Contracts", "MUST", "TestFactor5Contracts",

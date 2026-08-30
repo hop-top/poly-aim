@@ -27,8 +27,8 @@ func TestNegotiate_BelowMinErrors(t *testing.T) {
 	_, envErr := apiversion.Negotiate("0.9")
 	require.NotNil(t, envErr, "version below current must surface an envelope")
 	assert.Equal(t, errs.CodeInvalidFlag, envErr.Code)
-	assert.Equal(t, 64, envErr.ExitCode,
-		"unsupported --api-version maps to exit code 64 (usage error)")
+	assert.Equal(t, 2, envErr.ExitCode,
+		"unsupported --api-version maps to exit code 2 (usage error)")
 	assert.Contains(t, envErr.Cause, "0.9")
 	assert.Contains(t, envErr.Cause, apiversion.Current,
 		"the cause must enumerate the supported set so callers self-diagnose")

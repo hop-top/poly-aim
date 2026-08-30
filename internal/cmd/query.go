@@ -73,7 +73,7 @@ Examples:
 				// so the meta is built without forcing a load.
 				reg := aim.NewRegistry()
 				meta := provenanceFromCache(reg.Cache(), reg.SourceURL())
-				return output.Render(cmd.OutOrStdout(), format, payload, output.WithProvenance(meta))
+				return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, payload, meta)
 			}
 
 			// Pre-parse so we can route parse errors through the
@@ -100,7 +100,7 @@ Examples:
 
 			rows := toRows(models)
 			meta := provenanceFromCache(reg.Cache(), reg.SourceURL())
-			return output.Render(cmd.OutOrStdout(), format, rows, output.WithProvenance(meta))
+			return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, rows, meta)
 		},
 	}
 
@@ -110,6 +110,7 @@ Examples:
 	cli.SetSideEffect(cmd, cli.SideEffectRead)
 	cli.SetIdempotency(cmd, cli.IdempotencyYes)
 	cli.SetTopLevelVerb(cmd)
+	setExitCodes(cmd, exitCodesRead)
 	_ = cli.SetOutputSchema(cmd, cli.OutputSchema{
 		Type:    &[]modelRow{},
 		Version: SchemaVersion,

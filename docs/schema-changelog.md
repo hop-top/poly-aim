@@ -36,7 +36,7 @@ manifest, and accepted by `--api-version`.
   `kit-annotations`).
 - `--api-version` negotiation: only `1.0` is honored; the empty value
   defaults to `1.0`. Anything else returns `AIM_INVALID_FLAG` with
-  exit code 64.
+  exit code 2.
 - Circuit breaker: kit `aim-source` breaker guards
   `ModelsDevSource.Fetch`. State surfaces via `aim status` under the
   `source-breaker` section.

@@ -260,6 +260,12 @@ func (c *Cache) loadFromDisk(dir string) (map[string]*Provider, *cacheMeta, erro
 		return nil, nil, nil // corruption — fall through to live fetch
 	}
 
+	// Model.Provider is `json:"-"` and so is absent from the payload we
+	// just decoded. Re-derive it from the parent map key, mirroring the
+	// HTTP fetch path — without this every provider filter matches
+	// nothing once the cache is warm.
+	backfillProviders(providers)
+
 	// Read meta (optional — tolerate absence).
 	metaBytes, err := os.ReadFile(metaPath)
 	if err != nil {

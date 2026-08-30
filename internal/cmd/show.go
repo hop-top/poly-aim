@@ -12,6 +12,54 @@ import (
 	"hop.top/kit/go/console/output"
 )
 
+// modelDetailRow is the flat projection of a single model, used only by
+// the tag-driven formats (csv, text, human).
+//
+// json and yaml keep emitting the full nested [aim.Model] — that is the
+// declared output schema and agents depend on its shape. But aim.Model is
+// a library type describing the models.dev wire format, and giving it
+// `table:""` tags would push CLI presentation concerns into the public
+// API. The flat formats cannot render nested structs anyway, so they get
+// this denormalised view instead.
+type modelDetailRow struct {
+	Provider    string `table:"Provider"     json:"provider"     yaml:"provider"`
+	ID          string `table:"Model ID"     json:"id"           yaml:"id"`
+	Name        string `table:"Name"         json:"name"         yaml:"name"`
+	Family      string `table:"Family"       json:"family"       yaml:"family"`
+	Input       string `table:"Input"        json:"input"        yaml:"input"`
+	Output      string `table:"Output"       json:"output"       yaml:"output"`
+	ToolCall    bool   `table:"Tool Call"    json:"tool_call"    yaml:"tool_call"`
+	Reasoning   bool   `table:"Reasoning"    json:"reasoning"    yaml:"reasoning"`
+	OpenWeights bool   `table:"Open Weights" json:"open_weights" yaml:"open_weights"`
+	Attachment  bool   `table:"Attachment"   json:"attachment"   yaml:"attachment"`
+	Context     int    `table:"Context"      json:"context"      yaml:"context"`
+	InputLimit  int    `table:"Input Limit"  json:"input_limit"  yaml:"input_limit"`
+	OutputLimit int    `table:"Output Limit" json:"output_limit" yaml:"output_limit"`
+	ReleaseDate string `table:"Released"     json:"release_date" yaml:"release_date"`
+	Knowledge   string `table:"Knowledge"    json:"knowledge"    yaml:"knowledge"`
+}
+
+// toDetailRow flattens m for the tag-driven formats.
+func toDetailRow(m aim.Model) modelDetailRow {
+	return modelDetailRow{
+		Provider:    m.Provider,
+		ID:          m.ID,
+		Name:        m.Name,
+		Family:      m.Family,
+		Input:       strings.Join(m.Modalities.Input, ","),
+		Output:      strings.Join(m.Modalities.Output, ","),
+		ToolCall:    m.ToolCall,
+		Reasoning:   m.Reasoning,
+		OpenWeights: m.OpenWeights,
+		Attachment:  m.Attachment,
+		Context:     m.Limit.Context,
+		InputLimit:  m.Limit.Input,
+		OutputLimit: m.Limit.Output,
+		ReleaseDate: m.ReleaseDate,
+		Knowledge:   m.Knowledge,
+	}
+}
+
 // ShowCmd returns the `show` subcommand.
 func ShowCmd(root *cli.Root) *cobra.Command {
 	var (
@@ -116,9 +164,16 @@ Examples:
 				}
 				return nil
 			}
+			// Flat formats cannot express aim.Model's nested shape, so
+			// they render the denormalised projection instead. json and
+			// yaml keep the full record — that is the declared schema.
+			var payload any = m
+			if flatFormats[format] {
+				payload = toDetailRow(m)
+			}
 			return renderWithWarnings(
 				cmd.OutOrStdout(), cmd.ErrOrStderr(),
-				format, m, meta, warnings,
+				format, payload, meta, warnings,
 			)
 		},
 	}
@@ -130,6 +185,7 @@ Examples:
 	cli.SetSideEffect(cmd, cli.SideEffectRead)
 	cli.SetIdempotency(cmd, cli.IdempotencyYes)
 	cli.SetTopLevelVerb(cmd)
+	setExitCodes(cmd, exitCodesLookup)
 	_ = cli.SetOutputSchema(cmd, cli.OutputSchema{
 		Type:    &aim.Model{},
 		Version: SchemaVersion,

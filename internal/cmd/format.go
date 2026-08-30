@@ -17,10 +17,14 @@ const SchemaVersion = "aim/v1"
 // Fields cover whether the cache was actually re-fetched, the next TTL
 // boundary, and the source URL — enough for agents to chain follow-up
 // reads without re-running `refresh` on a cache miss.
+//
+// The `table` tags are load-bearing beyond table mode: csv, text, and
+// human all derive their columns from them, and an untagged struct
+// renders as an empty document in each.
 type refreshStatus struct {
-	Refreshed   bool   `json:"refreshed"               yaml:"refreshed"`
-	CachedUntil string `json:"cached_until,omitempty"  yaml:"cached_until,omitempty"`
-	Source      string `json:"source,omitempty"        yaml:"source,omitempty"`
+	Refreshed   bool   `table:"Refreshed"    json:"refreshed"               yaml:"refreshed"`
+	CachedUntil string `table:"Cached Until" json:"cached_until,omitempty"  yaml:"cached_until,omitempty"`
+	Source      string `table:"Source"       json:"source,omitempty"        yaml:"source,omitempty"`
 }
 
 // defaultFormat returns "table" when stdout is a TTY, else "json".

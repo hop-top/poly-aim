@@ -57,7 +57,7 @@ Examples:
 				}
 			}
 			meta := provenanceFromCache(reg.Cache(), reg.SourceURL())
-			return output.Render(cmd.OutOrStdout(), format, rows, output.WithProvenance(meta))
+			return renderEnvelope(cmd.OutOrStdout(), cmd.ErrOrStderr(), format, rows, meta)
 		},
 	}
 
@@ -66,6 +66,7 @@ Examples:
 	cli.SetSideEffect(cmd, cli.SideEffectRead)
 	cli.SetIdempotency(cmd, cli.IdempotencyYes)
 	cli.SetTopLevelVerb(cmd)
+	setExitCodes(cmd, exitCodesRead)
 	_ = cli.SetOutputSchema(cmd, cli.OutputSchema{
 		Type:    &[]providerRow{},
 		Version: SchemaVersion,
