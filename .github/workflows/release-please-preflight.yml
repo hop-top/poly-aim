@@ -20,8 +20,11 @@ on:
       - 'rs/Cargo.toml'
       - 'composer.json'
       - 'php/composer.json'
+      - 'go.mod'
   workflow_dispatch: {}
 
 jobs:
   preflight:
+    permissions:
+      contents: read  # annotations + step summary need nothing more
     uses: hop-top/.github/.github/workflows/release-please-preflight.yml@v0
