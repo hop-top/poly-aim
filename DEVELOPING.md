@@ -11,7 +11,8 @@ Pick the path that matches what you're touching:
 
 **Local (recommended for single-language work)** — install the toolchain
 you need: Go 1.26+, Python 3.11+ (`uv`), Node 22+ (with `--experimental-strip-types`),
-Rust stable (`rustup`), PHP 8.2+ with Composer.
+Rust stable (`rustup`), PHP 8.3+ with Composer (`php/composer.json`
+sets the floor).
 
 Host lint tooling (golangci-lint, shellcheck, markdownlint-cli2) is
 pinned in `mise.toml` at versions matching CI — `mise install`
