@@ -20,7 +20,10 @@
     // lint applies to docs going forward but not to retroactive
     // restructuring of past decisions.
     "docs/superpowers/**",
-    "CHANGELOG.md"
+    // release-please owns every changelog (root + per-SDK); formatting
+    // quirks live in the generator, never hand-fixed here.
+    "CHANGELOG.md",
+    "**/CHANGELOG.md"
   ],
   "config": {
     // Default rule set with relaxations practical for an OSS repo

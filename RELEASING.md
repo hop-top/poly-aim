@@ -43,13 +43,41 @@ the lifecycle independently via release-please prerelease bumps on the
 
 1. Conventional commits land on `main`
 2. release-please opens / updates a release PR per affected component
+   (`separate-pull-requests: true` — one standing PR per component,
+   never a combined one)
 3. Merging the release PR cuts the GitHub Release + `<component>/v<version>` tag
 4. `.github/workflows/publish.yml` fires on the tag push and delegates
    to the org-shared `hop-top/.github` reusable workflow
 
-The release workflow lives at `.github/workflows/release-please.yml`
-and requires the `GH_RELEASE_PLEASE_PAT` org secret. It supports
-`workflow_dispatch` for manual retrigger after sibling-PR conflicts.
+The release workflow lives at `.github/workflows/release-please.yml`.
+It mints a short-lived installation token from the org release-bot
+GitHub App (`RELEASE_BOT_APP_ID` + `RELEASE_BOT_PRIVATE_KEY`) so
+release PRs come from `release-bot[bot]` — long-lived PATs are
+rejected by the preflight. It supports `workflow_dispatch` for manual
+retrigger after sibling-PR conflicts.
+
+### Release PR mechanics
+
+- **Approval brake**: release PRs rewrite
+  `.release-please-manifest.json` + `CHANGELOG.md`, which are owned by
+  `@hop-top/release` in CODEOWNERS. The `production-branch-guardrail`
+  ruleset (0 required approvals + code-owner review) means release PRs
+  need an explicit release-team approval; everything else auto-merges
+  freely.
+- **Merge style**: squash single-commit release PRs (a plain merge
+  leaves an unparseable `Merge pull request #N` subject and
+  release-please never tags).
+- **Companion tagger**: `.github/workflows/release-tag.yml` tags
+  `<component>/v<version>` at the merge commit and flips the status
+  label. It is idempotent — with native GitHub Releases on,
+  release-please tags first and the companion harmlessly loses the
+  race.
+- **Native Releases stay on**: `skip-github-release` is deliberately
+  NOT set. release-please anchors commit ranges on Release objects,
+  so tag-only releases make standing PRs re-list already-shipped
+  commits (googleapis/release-please#1295). Until upstream supports
+  tag-based lookup, Releases remain on this repo and the companion
+  sits ready.
 
 ### Preflight gate
 
@@ -94,6 +122,10 @@ Mirror push is gated on publish success: if `publish-rs` fails,
 `mirror` does not run, and `notify-vanity` (Go) / Packagist notify
 (PHP) are short-circuited.
 
+`publish.yml` also supports `workflow_dispatch` to re-run a publish
+for an existing tag without re-pushing it. Caveat: dispatch replays
+the workflow file at the tag's commit, not main HEAD.
+
 ### Required GitHub secrets
 
 All secrets are org-level on `hop-top`. They MUST be available to
@@ -104,15 +136,14 @@ the secret is in place.
 
 | Secret                     | Required for                | Provisioned at |
 |----------------------------|-----------------------------|----------------|
-| `GH_RELEASE_PLEASE_PAT`    | `release-please.yml`        | GitHub PAT with `repo` + `workflow` scopes |
+| `RELEASE_BOT_APP_ID`       | `release-please.yml`, `release-tag.yml`, `aim/v*` vanity-URL refresh | hop-top org App registration |
+| `RELEASE_BOT_PRIVATE_KEY`  | same as `RELEASE_BOT_APP_ID` | hop-top org App private key |
 | `GH_MIRROR_PAT`            | Mirror subtree push (all SDK components) | GitHub PAT with `repo` + `workflow` on mirror repos |
 | `PYPI_REGISTRY_TOKEN`      | `aim-py/v*`                 | [pypi.org](https://pypi.org/manage/account/token/) |
 | `NPM_REGISTRY_TOKEN`       | `aim-ts/v*`                 | npmjs.com automation token |
 | `CARGO_REGISTRY_TOKEN`     | `aim-rs/v*`                 | [crates.io](https://crates.io/settings/tokens) |
 | `PACKAGIST_USERNAME`       | `aim-php/v*` notify         | packagist.org account |
 | `PACKAGIST_TOKEN`          | `aim-php/v*` notify         | [packagist.org](https://packagist.org/profile/) API token |
-| `RELEASE_BOT_APP_ID`       | `aim/v*` vanity-URL refresh | hop-top org App registration |
-| `RELEASE_BOT_PRIVATE_KEY`  | `aim/v*` vanity-URL refresh | hop-top org App private key |
 
 The publish workflow is a thin delegating shell over the org-shared
 reusable workflow. Behavior changes (new ecosystem, default-flag
