@@ -1,0 +1,26 @@
+name: release-tag
+
+# Companion to release-please: on merge of a release-please PR, derives
+# the component from the head branch and the version from the manifest
+# at the merge commit, pushes <component>/v<version>, and flips the PR
+# label. Idempotent — while native GitHub Releases are on (the current
+# org stance; see googleapis/release-please#1295 for why
+# skip-github-release stays off), release-please tags first and this
+# workflow harmlessly loses the race.
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  tag:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release-please--branches--')
+    uses: hop-top/.github/.github/workflows/release-tag-on-merge.yml@v0
+    secrets:
+      RELEASE_BOT_APP_ID: ${{ secrets.RELEASE_BOT_APP_ID }}
+      RELEASE_BOT_PRIVATE_KEY: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
