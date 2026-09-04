@@ -53,16 +53,12 @@ const (
 )
 
 // Exit codes for classes kit ships no constructor for. Classes kit
-// covers (usage=2, not-found=3, conflict=4) come from the kit
-// constructors used below and are not repeated here.
+// covers (usage=2, not-found=3, conflict=4, transient=6) come from the
+// kit constructors used below and are not repeated here.
 const (
 	// exitGeneric classifies unrecoverable local failures (corrupt
 	// cache) where neither retry nor a caller-side fix applies.
 	exitGeneric = 1
-	// exitTransient classifies retryable failures — transport errors
-	// and upstream unavailability where backing off and retrying the
-	// same invocation may succeed.
-	exitTransient = 6
 )
 
 // NotFound returns an *output.Error for a missing provider/model lookup.
@@ -148,19 +144,17 @@ func Network(url string, cause error) *output.Error {
 	if cause != nil {
 		causeMsg = cause.Error()
 	}
-	return &output.Error{
-		Code:    CodeNetwork,
-		Message: msg,
-		Cause:   causeMsg,
-		SuggestedFix: "check network connectivity then retry with " +
-			"`aim refresh --force`; `aim status` shows the last " +
-			"successful fetch from the local cache",
-		Alternatives: []string{
-			"aim refresh --force",
-			"aim status",
-		},
-		ExitCode: exitTransient,
+	e := output.TransientError(msg)
+	e.Code = CodeNetwork
+	e.Cause = causeMsg
+	e.SuggestedFix = "check network connectivity then retry with " +
+		"`aim refresh --force`; `aim status` shows the last " +
+		"successful fetch from the local cache"
+	e.Alternatives = []string{
+		"aim refresh --force",
+		"aim status",
 	}
+	return e
 }
 
 // CacheCorrupt is returned when the local cache is unreadable.
@@ -192,18 +186,16 @@ func SourceUnavailable(url string, cause error) *output.Error {
 	if cause != nil {
 		causeMsg = cause.Error()
 	}
-	return &output.Error{
-		Code:    CodeSourceUnavailable,
-		Message: msg,
-		Cause:   causeMsg,
-		SuggestedFix: "check models.dev availability, then retry " +
-			"with `aim refresh --force`",
-		Alternatives: []string{
-			"aim refresh --force",
-			"aim status",
-		},
-		ExitCode: exitTransient,
+	e := output.TransientError(msg)
+	e.Code = CodeSourceUnavailable
+	e.Cause = causeMsg
+	e.SuggestedFix = "check models.dev availability, then retry " +
+		"with `aim refresh --force`"
+	e.Alternatives = []string{
+		"aim refresh --force",
+		"aim status",
 	}
+	return e
 }
 
 // CacheLocked is returned when a concurrent refresh holds the lockfile
