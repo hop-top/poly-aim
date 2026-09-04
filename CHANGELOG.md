@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.0-alpha.5](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.4...aim/v0.1.0-alpha.5) (2026-09-04)
+
+
+### Bug Fixes
+
+* **dev:** raise devcontainer php to composer.json floor ([#42](https://github.com/hop-top/poly-aim/issues/42)) ([22b43f3](https://github.com/hop-top/poly-aim/commit/22b43f37da189740d3dc61e959f59b6d12d1e153))
+* **dev:** real devcontainer, mise-pinned lint tools, Makefile repairs ([#39](https://github.com/hop-top/poly-aim/issues/39)) ([4ebc135](https://github.com/hop-top/poly-aim/commit/4ebc13525e28c8dc3cc7d2b85510e6bfec2de2d7))
+
 ## [0.1.0-alpha.4](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.3...aim/v0.1.0-alpha.4) (2026-08-30)
 
 
