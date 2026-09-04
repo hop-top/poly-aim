@@ -27,12 +27,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
           coverage: none
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         with:
           path: php/vendor
           key: php-${{ hashFiles('php/composer.json') }}
@@ -42,7 +42,7 @@ jobs:
   phpstan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
