@@ -43,12 +43,12 @@ regen() {
 # command leaf, the cli kit hookups in main.go, and the schema changelog
 # (factor 12 reads it directly).
 if match \
-    '^internal/conformance/' \
-    '^internal/cmd/' \
-    '^internal/cli/' \
-    '^internal/apiversion/' \
-    '^internal/errs/' \
-    '^cmd/aim/' \
+    '^go/internal/conformance/' \
+    '^go/internal/cmd/' \
+    '^go/internal/cli/' \
+    '^go/internal/apiversion/' \
+    '^go/internal/errs/' \
+    '^go/cmd/aim/' \
     '^docs/schema-changelog\.md$'; then
     regen "conformance" "docs/12-factor-conformance.md" make conformance
 fi
@@ -56,13 +56,13 @@ fi
 # docs/sdk-parity.md
 # Inputs: every SDK's type files, shared fixtures, and the parity script.
 if match \
-    '^aim\.go$' \
+    '^go/aim\.go$' \
     '^py/' \
     '^ts/' \
     '^rs/' \
     '^php/' \
-    '^testdata/(query|registry)-vectors\.json$' \
-    '^testdata/api-fixture\.json$' \
+    '^spec/fixtures/(query|registry)-vectors\.json$' \
+    '^spec/fixtures/api-fixture\.json$' \
     '^scripts/verify-sdk-parity\.sh$'; then
     regen "sdk-parity" "docs/sdk-parity.md" make parity
 fi

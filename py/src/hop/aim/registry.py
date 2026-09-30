@@ -10,7 +10,7 @@ from .types import Filter, Model, Provider
 
 # NOTE: XDG cache is used in this Python port via platformdirs (optional dep).
 # If platformdirs is not installed, in-memory cache is used instead.
-# See testdata/xdg.md for XDG cache dir algorithm.
+# See spec/xdg.md for XDG cache dir algorithm.
 
 try:
     from platformdirs import user_cache_dir as _user_cache_dir

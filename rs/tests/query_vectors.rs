@@ -1,4 +1,4 @@
-//! Cross-SDK query parser vectors. Loaded from testdata/query-vectors.json.
+//! Cross-SDK query parser vectors. Loaded from spec/fixtures/query-vectors.json.
 
 use hop_top_aim::{parse_query, Filter};
 use serde::Deserialize;
@@ -61,7 +61,7 @@ fn vectors_path() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("repo root")
-        .join("testdata/query-vectors.json")
+        .join("spec/fixtures/query-vectors.json")
 }
 
 #[test]

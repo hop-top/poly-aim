@@ -16,12 +16,12 @@ import (
 // ptr returns a pointer to v; used for tristate bool Filter fields.
 func ptr[T any](v T) *T { return &v }
 
-// fixtureServer starts an httptest.Server serving testdata/api-fixture.json.
+// fixtureServer starts an httptest.Server serving spec/fixtures/api-fixture.json.
 // Caller must call srv.Close().
 func fixtureServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	data, err := os.ReadFile("testdata/api-fixture.json")
-	require.NoError(t, err, "read testdata/api-fixture.json")
+	data, err := os.ReadFile("../spec/fixtures/api-fixture.json")
+	require.NoError(t, err, "read spec/fixtures/api-fixture.json")
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write(data)

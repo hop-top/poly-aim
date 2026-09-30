@@ -76,34 +76,34 @@ for the CLI agent surface lives in
 
 ```text
 aim/
-├── cmd/aim/                  go binary entry point
-│   ├── main.go               cli.New, command tree wiring
-│   └── main_test.go
-├── internal/
-│   ├── cmd/                  per-subcommand RunE implementations
-│   ├── errs/                 structured error envelope constructors
-│   ├── status/               aim-specific status providers (cache, source, …)
-│   ├── apiversion/           --api-version negotiation
-│   └── conformance/          12-factor TestFactor* + report generator
-├── aim.go                    canonical types: Modalities, Limits, Cost, Model, Provider, Filter, Source
-├── cache.go                  XDG file cache (atomic write, lockfile, TTL, stale-on-error)
-├── source.go                 HTTP fetcher + breaker around models.dev
-├── source_breaker_test.go
-├── source_test.go
-├── query.go                  DSL parser, ExplainQuery (parser-only)
-├── query_test.go
-├── registry.go               Registry: lazy load + filter + sort
-├── registry_test.go
-├── e2e_test.go
+├── go/                       hop.top/aim — Go module + CLI (mirrored to hop-top/aim)
+│   ├── cmd/aim/              go binary entry point
+│   │   ├── main.go           cli.New, command tree wiring
+│   │   └── main_test.go
+│   ├── internal/
+│   │   ├── cmd/              per-subcommand RunE implementations
+│   │   ├── errs/             structured error envelope constructors
+│   │   ├── status/           aim-specific status providers (cache, source, …)
+│   │   ├── apiversion/       --api-version negotiation
+│   │   └── conformance/      12-factor TestFactor* + report generator
+│   ├── aim.go                canonical types: Modalities, Limits, Cost, Model, Provider, Filter, Source
+│   ├── cache.go              XDG file cache (atomic write, lockfile, TTL, stale-on-error)
+│   ├── source.go             HTTP fetcher + breaker around models.dev
+│   ├── query.go              DSL parser, ExplainQuery (parser-only)
+│   ├── registry.go           Registry: lazy load + filter + sort
+│   └── provider.go           provider facts derived from the catalog
 ├── py/                       hop-top-aim — Python SDK (httpx)
 ├── ts/                       @hop-top/aim — TypeScript SDK (fetch + node:test)
 ├── rs/                       hop-top-aim — Rust crate (reqwest + tokio)
 ├── php/                      hop-top/aim — Composer package (Guzzle)
-├── testdata/
-│   ├── query-vectors.json    cross-SDK parser truth set
-│   ├── registry-vectors.json cross-SDK filter truth set
-│   ├── api-fixture.json      shared catalog for registry tests
-│   └── api-schema.json       wire format JSON Schema
+├── spec/
+│   ├── xdg.md                XDG cache dir algorithm every SDK follows
+│   └── fixtures/
+│       ├── query-vectors.json    cross-SDK parser truth set
+│       ├── registry-vectors.json cross-SDK filter truth set
+│       ├── api-fixture.json      shared catalog for registry tests
+│       ├── api-schema.json       wire format JSON Schema
+│       └── provider-*.json       cross-SDK provider facts truth sets
 ├── docs/                     user-facing docs (this file + the manual)
 ├── scripts/                  promote-release.sh + verify-sdk-parity.sh
 └── .github/                  release-please config + workflows
@@ -113,7 +113,7 @@ aim/
 
 The Go side has four layers with strict boundaries.
 
-### Layer 1 — wire types (`aim.go`)
+### Layer 1 — wire types (`go/aim.go`)
 
 Pure data definitions matching `models.dev/api.json` 1:1. No
 behavior, no I/O. The single file is reflected by `serde`-equivalent
@@ -164,7 +164,7 @@ nine recognized keys (`in`, `out`, `provider`, `family`, `tool_call`,
 plus free-text. It accepts quoted strings, comma-separated values
 for modalities, repeated keys (append semantics), and rejects
 unknown keys + malformed booleans + bare colons. The same grammar
-runs in every SDK against the same `testdata/query-vectors.json`.
+runs in every SDK against the same `spec/fixtures/query-vectors.json`.
 
 `ExplainQuery` is a parser-only path: it returns the parsed
 `Filter` plus the free-text token slice without touching the cache
@@ -177,7 +177,7 @@ deterministic (alphabetical by `Provider.ID` then `Model.ID`); all
 non-zero filter fields are ANDed; modality fields use subset
 containment.
 
-### Layer 4 — CLI surface (`cmd/aim/`, `internal/`)
+### Layer 4 — CLI surface (`go/cmd/aim/`, `go/internal/`)
 
 The binary wires kit's `cli.Root` with five adopter leaves (`list`,
 `show`, `providers`, `query`, `refresh`) plus two kit-shipped
@@ -189,18 +189,18 @@ way to ship a leaf that doesn't satisfy the agent contract.
 
 **Internal packages**:
 
-- `internal/cmd/` — one file per leaf. Each `*Cmd(root)` constructor
+- `go/internal/cmd/` — one file per leaf. Each `*Cmd(root)` constructor
   returns a `*cobra.Command` already annotated.
-- `internal/errs/` — error-envelope constructors. Every RunE returns
+- `go/internal/errs/` — error-envelope constructors. Every RunE returns
   `*output.Error`; kit's `WrapRunE` middleware renders it through
   `RenderError` so the wire format follows `--format`.
-- `internal/status/` — `StatusProvider` implementations for cache,
+- `go/internal/status/` — `StatusProvider` implementations for cache,
   source, source-breaker, identity, paths, environment. Honors a
   strict env-var allowlist + sensitive-name redaction.
-- `internal/apiversion/` — `--api-version` negotiation. Wraps every
+- `go/internal/apiversion/` — `--api-version` negotiation. Wraps every
   leaf's `RunE` so unsupported versions fail fast with a structured
   envelope, not a bare exit code.
-- `internal/conformance/` — `TestFactor1`...`TestFactor12` plus
+- `go/internal/conformance/` — `TestFactor1`...`TestFactor12` plus
   `TestGenerateReport`. The report (`docs/12-factor-conformance.md`)
   is regenerated by running the test.
 
@@ -213,11 +213,11 @@ language boundaries. The only coupling points:
 1. **Wire format**: `models.dev/api.json` is the contract. Every SDK
    decodes the same JSON into structurally equivalent types.
 2. **Query DSL**: every SDK accepts the same grammar against
-   `testdata/query-vectors.json`. The Go binary's `aim query` is
+   `spec/fixtures/query-vectors.json`. The Go binary's `aim query` is
    the canonical implementation.
 3. **Filter semantics**: every SDK's `Registry.models(filter)`
-   returns the same model list against `testdata/registry-vectors.json`
-   given the same `testdata/api-fixture.json`.
+   returns the same model list against `spec/fixtures/registry-vectors.json`
+   given the same `spec/fixtures/api-fixture.json`.
 
 The cross-SDK conformance gate is `scripts/verify-sdk-parity.sh`
 (also `make parity`). It runs every SDK's test suite against the
@@ -253,7 +253,7 @@ bugfix forces a Rust version bump.
 
 ### Single source of truth for types
 
-The Go file `aim.go` is the canonical type definition. Other SDKs
+The Go file `go/aim.go` is the canonical type definition. Other SDKs
 mirror it. When the Go file gains a field, the parity gate
 (`make parity` driven by `query-vectors.json` + `registry-vectors.json`)
 catches missing wire decode in any other SDK before merge.
@@ -273,7 +273,7 @@ ship its own envelope library.
 
 Errors use the same structural discipline: `code`, `message`,
 `cause`, `suggested_fix`, `alternatives`, `exit_code`. Every error
-constructor lives in `internal/errs/`; kit's `WrapRunE` routes
+constructor lives in `go/internal/errs/`; kit's `WrapRunE` routes
 returned errors through the wire-format renderer.
 
 ### Tristate filters
@@ -306,7 +306,7 @@ external file to check.
 
 ### Conformance as code
 
-The 12-factor contract is enforced by `internal/conformance/`
+The 12-factor contract is enforced by `go/internal/conformance/`
 TestFactor* tests, not by a checklist. Every factor has a test
 that fails if the implementation drifts. The matrix in
 `docs/12-factor-conformance.md` is auto-generated from the test
@@ -347,16 +347,16 @@ aim's.
 
 | To add… | Touch… |
 |---------|--------|
-| A new wire-format field | `aim.go` (Model or Filter), update parser if applicable, update parity fixtures, all SDKs follow |
+| A new wire-format field | `go/aim.go` (Model or Filter), update parser if applicable, update parity fixtures, all SDKs follow |
 | A new query DSL key | `query.go` `knownTagKeys` + `applyTag`, update fixture, all SDKs follow |
-| A new CLI leaf | `internal/cmd/<name>.go`, register in `cmd/aim/main.go`, annotate via `cli.Set*`, add factor tests in `internal/conformance/` if needed |
-| A new status section | New `StatusProvider` in `internal/status/`, register in `Register()` |
-| A new error code | New constructor in `internal/errs/`, document in `docs/manual/commands.md` error catalog |
+| A new CLI leaf | `go/internal/cmd/<name>.go`, register in `go/cmd/aim/main.go`, annotate via `cli.Set*`, add factor tests in `go/internal/conformance/` if needed |
+| A new status section | New `StatusProvider` in `go/internal/status/`, register in `Register()` |
+| A new error code | New constructor in `go/internal/errs/`, document in `docs/manual/commands.md` error catalog |
 | A new SDK language | Mirror the four-file shape (types, query, source, registry), drive shared fixtures, add to release-please config + `make parity` script |
 
 ## Open issues
 
-- **Upstream-dependent — track but don't act.** `cmd/aim/main.go`
+- **Upstream-dependent — track but don't act.** `go/cmd/aim/main.go`
   hand-walks the command tree at boot to wrap every leaf's `RunE`
   with `--api-version` validation. Kit (`v0.4.0-alpha.6`) does not
   ship native persistent-flag-rejection middleware that routes

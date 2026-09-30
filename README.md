@@ -9,7 +9,7 @@
 <p align="center">
     <a href="https://github.com/hop-top/poly-aim/releases"><img src="https://img.shields.io/github/release/hop-top/poly-aim.svg" alt="Release"/></a>
     <a href="https://pkg.go.dev/hop.top/aim?tab=doc"><img src="https://pkg.go.dev/badge/hop.top/aim.svg" alt="GoDoc"/></a>
-    <a href="https://github.com/hop-top/poly-aim/actions"><img src="https://github.com/hop-top/poly-aim/actions/workflows/ci.yml/badge.svg" alt="Build Status"/></a>
+    <a href="https://github.com/hop-top/poly-aim/actions"><img src="https://github.com/hop-top/poly-aim/actions/workflows/ci-go.yml/badge.svg" alt="Build Status"/></a>
     <a href="https://github.com/hop-top/poly-aim/stargazers"><img src="https://img.shields.io/github/stars/hop-top/poly-aim?style=social" alt="GitHub stars"/></a>
     <a href="https://github.com/hop-top/poly-aim/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hop-top/poly-aim" alt="License"/></a>
 </p>
@@ -78,7 +78,7 @@ agent-safe CLI surface lives in the Go binary.
 
 | Language | Path | Distribution | Status |
 |----------|------|--------------|--------|
-| Go (canonical) | `.` | `go get hop.top/aim` | `0.1.0-alpha.2` |
+| Go (canonical) | `go/` | `go get hop.top/aim` | `0.1.0-alpha.2` |
 | Python | `py/` | `pip install hop-top-aim` | `0.1.0-alpha.2` |
 | TypeScript | `ts/` | `npm install @hop-top/aim` | `0.1.0-alpha.1` |
 | Rust | `rs/` | `cargo add hop-top-aim` | `0.1.0-alpha.1` |

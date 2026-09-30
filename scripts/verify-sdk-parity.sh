@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 echo "==> Go"
-GOWORK=off go test -buildvcs=false -count=1 -short ./... > /dev/null
+( cd go && GOWORK=off go test -buildvcs=false -count=1 -short ./... > /dev/null )
 echo "    ok"
 
 echo "==> Python"

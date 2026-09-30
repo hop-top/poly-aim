@@ -69,7 +69,7 @@ func TestFactor12Evolution(t *testing.T) {
 	}
 
 	// docs/schema-changelog.md exists and mentions 1.0.0.
-	changelog := filepath.Join("..", "..", "docs", "schema-changelog.md")
+	changelog := filepath.Join("..", "..", "..", "docs", "schema-changelog.md")
 	body, err := os.ReadFile(changelog)
 	if err != nil {
 		t.Fatalf("read schema-changelog.md: %v", err)

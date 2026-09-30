@@ -54,6 +54,6 @@ jobs:
           package: hop-top/aim
           mirror: hop-top/aim-php
         aim:
-          dir: .
+          dir: go
           ecosystem: go
           mirror: hop-top/aim

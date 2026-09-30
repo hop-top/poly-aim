@@ -7,7 +7,7 @@ from pathlib import Path
 from hop.aim.query import parse_query
 from hop.aim.types import Filter
 
-_VECTORS_PATH = Path(__file__).parents[2] / "testdata" / "query-vectors.json"
+_VECTORS_PATH = Path(__file__).parents[2] / "spec" / "fixtures" / "query-vectors.json"
 vectors = json.loads(_VECTORS_PATH.read_text())
 
 

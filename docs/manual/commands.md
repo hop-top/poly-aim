@@ -176,7 +176,7 @@ Every error returns a structured payload on stderr:
 ```
 
 Stable code catalog: see [agent.md](agent.md#error-envelope). Source
-of truth: [`internal/errs/errs.go`](../../internal/errs/errs.go).
+of truth: [`internal/errs/errs.go`](../../go/internal/errs/errs.go).
 
 The process exits with the envelope's `exit_code`:
 

@@ -63,7 +63,7 @@ fn repo_root() -> PathBuf {
 }
 
 fn load_catalog() -> HashMap<String, Provider> {
-    let raw = fs::read_to_string(repo_root().join("testdata/api-fixture.json"))
+    let raw = fs::read_to_string(repo_root().join("spec/fixtures/api-fixture.json"))
         .expect("read api fixture");
     let mut providers: HashMap<String, Provider> =
         serde_json::from_str(&raw).expect("parse fixture");
@@ -81,7 +81,7 @@ async fn registry_vectors_all() {
     let catalog = load_catalog();
     let registry = Registry::from_catalog(catalog);
 
-    let raw = fs::read_to_string(repo_root().join("testdata/registry-vectors.json"))
+    let raw = fs::read_to_string(repo_root().join("spec/fixtures/registry-vectors.json"))
         .expect("read vectors");
     let vectors: Vec<Vector> = serde_json::from_str(&raw).expect("parse vectors");
 

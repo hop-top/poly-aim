@@ -87,7 +87,7 @@ aim show nope nope --format json 2>&1 >/dev/null
 
 The `code`, `suggested_fix`, and `alternatives` fields are deliberately
 runnable. The full code catalog is in [agent.md](agent.md#error-envelope)
-and [`internal/errs/errs.go`](../../internal/errs/errs.go).
+and [`internal/errs/errs.go`](../../go/internal/errs/errs.go).
 
 ### Force a specific output format
 

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// queryVector is one entry in testdata/query-vectors.json.
+// queryVector is one entry in spec/fixtures/query-vectors.json.
 type queryVector struct {
 	Description string          `json:"description"`
 	Input       string          `json:"input"`
@@ -33,7 +33,7 @@ type expectedFields struct {
 }
 
 func TestParseQuery_Vectors(t *testing.T) {
-	b, err := os.ReadFile("testdata/query-vectors.json")
+	b, err := os.ReadFile("../spec/fixtures/query-vectors.json")
 	require.NoError(t, err)
 
 	var vectors []queryVector

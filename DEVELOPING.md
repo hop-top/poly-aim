@@ -43,11 +43,11 @@ Requires Docker. Auto-installs `@devcontainers/cli` via `npx` on first use.
 
 | Target | What runs |
 |--------|-----------|
-| `make build` | `go build -o bin/aim ./cmd/aim` |
+| `make build` | `go build -o ../bin/aim ./cmd/aim` (in `go/`) |
 | `make test` / `make test-go` | Go test suite |
 | `make test-py` / `make test-ts` / `make test-rs` / `make test-php` | Per-language SDK tests |
 | `make test-all` | All 5 SDK test suites |
-| `make lint` / `make lint-go` | `go vet ./...` |
+| `make lint` / `make lint-go` | `go vet ./...` + golangci-lint (in `go/`) |
 | `make lint-py` | Ruff |
 | `make lint-ts` | `tsc --noEmit -p tsconfig.json` |
 | `make lint-rs` | `cargo fmt --check && cargo clippy -D warnings` |

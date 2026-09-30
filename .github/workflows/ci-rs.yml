@@ -5,15 +5,15 @@ on:
     branches: [main]
     paths:
       - "rs/**"
-      - "testdata/query-vectors.json"
-      - "testdata/registry-vectors.json"
-      - "testdata/api-fixture.json"
+      - "spec/fixtures/query-vectors.json"
+      - "spec/fixtures/registry-vectors.json"
+      - "spec/fixtures/api-fixture.json"
       - ".github/workflows/ci-rs.yml"
   pull_request:
     branches: [main]
     paths:
       - "rs/**"
-      - "testdata/**"
+      - "spec/fixtures/**"
       - ".github/workflows/ci-rs.yml"
 
 permissions:

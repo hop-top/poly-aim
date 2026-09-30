@@ -37,7 +37,7 @@ Other languages: see the per-SDK READMEs.
 
 | Language | Path | Distribution |
 |----------|------|--------------|
-| Go (canonical) | `.` | `go get hop.top/aim` |
+| Go (canonical) | `go/` | `go get hop.top/aim` |
 | Python | `py/` | `pip install hop-top-aim` |
 | TypeScript | `ts/` | `npm install @hop-top/aim` |
 | Rust | `rs/` | `cargo add hop-top-aim` |
@@ -151,10 +151,10 @@ are settings (no key suffix), `AWS_SECRET_ACCESS_KEY` is a key var, and
 Vertex's `GOOGLE_APPLICATION_CREDENTIALS` (a file path) is a setting.
 
 Conformance fixtures shared by every SDK:
-`testdata/provider-fixture.json` (input catalog),
-`testdata/provider-facts-vectors.json`,
-`testdata/provider-lookup-vectors.json`,
-`testdata/provider-protocol-vectors.json`.
+`spec/fixtures/provider-fixture.json` (input catalog),
+`spec/fixtures/provider-facts-vectors.json`,
+`spec/fixtures/provider-lookup-vectors.json`,
+`spec/fixtures/provider-protocol-vectors.json`.
 
 ## Custom source
 
