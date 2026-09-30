@@ -1,0 +1,290 @@
+{
+  "abliteration-ai": {
+    "id": "abliteration-ai",
+    "name": "abliteration.ai",
+    "api": "https://api.abliteration.ai/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "ABLIT_KEY"
+    ],
+    "models": {}
+  },
+  "amazon-bedrock": {
+    "id": "amazon-bedrock",
+    "name": "Amazon Bedrock",
+    "npm": "@ai-sdk/amazon-bedrock",
+    "env": [
+      "AWS_ACCESS_KEY_ID",
+      "AWS_SECRET_ACCESS_KEY",
+      "AWS_REGION",
+      "AWS_BEARER_TOKEN_BEDROCK"
+    ],
+    "models": {}
+  },
+  "anthropic": {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "npm": "@ai-sdk/anthropic",
+    "env": [
+      "ANTHROPIC_API_KEY"
+    ],
+    "models": {}
+  },
+  "azure": {
+    "id": "azure",
+    "name": "Azure",
+    "npm": "@ai-sdk/azure",
+    "env": [
+      "AZURE_RESOURCE_NAME",
+      "AZURE_API_KEY"
+    ],
+    "models": {}
+  },
+  "cloudflare-ai-gateway": {
+    "id": "cloudflare-ai-gateway",
+    "name": "Cloudflare AI Gateway",
+    "npm": "ai-gateway-provider",
+    "env": [
+      "CLOUDFLARE_API_TOKEN",
+      "CLOUDFLARE_ACCOUNT_ID",
+      "CLOUDFLARE_GATEWAY_ID"
+    ],
+    "models": {}
+  },
+  "deepseek": {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "api": "https://api.deepseek.com",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "DEEPSEEK_API_KEY"
+    ],
+    "models": {}
+  },
+  "digitalocean": {
+    "id": "digitalocean",
+    "name": "DigitalOcean",
+    "api": "https://inference.do-ai.run/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "DIGITALOCEAN_ACCESS_TOKEN"
+    ],
+    "models": {}
+  },
+  "example-bare": {
+    "id": "example-bare",
+    "name": "Example no npm, no api",
+    "env": [
+      "EXAMPLE_BARE_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-ipv6-loopback": {
+    "id": "example-ipv6-loopback",
+    "name": "Example IPv6 loopback",
+    "api": "http://[::1]:8000/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_IPV6_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-localhost-lookalike": {
+    "id": "example-localhost-lookalike",
+    "name": "Example localhost lookalike",
+    "api": "https://localhost.example.com/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_LOOKALIKE_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-localhost-subdomain": {
+    "id": "example-localhost-subdomain",
+    "name": "Example .localhost name",
+    "api": "http://llm.localhost:8080/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_SUB_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-localhost-upper": {
+    "id": "example-localhost-upper",
+    "name": "Example uppercase localhost",
+    "api": "http://LOCALHOST:11434/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_UPPER_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-loopback-range": {
+    "id": "example-loopback-range",
+    "name": "Example 127/8 loopback",
+    "api": "http://127.1.2.3:9000/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_RANGE_API_KEY"
+    ],
+    "models": {}
+  },
+  "example-unspecified-addr": {
+    "id": "example-unspecified-addr",
+    "name": "Example 0.0.0.0",
+    "api": "http://0.0.0.0:8000/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "EXAMPLE_UNSPEC_API_KEY"
+    ],
+    "models": {}
+  },
+  "fireworks-ai": {
+    "id": "fireworks-ai",
+    "name": "Fireworks AI",
+    "api": "https://api.fireworks.ai/inference/v1/",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "FIREWORKS_API_KEY"
+    ],
+    "models": {}
+  },
+  "google": {
+    "id": "google",
+    "name": "Google",
+    "npm": "@ai-sdk/google",
+    "env": [
+      "GOOGLE_API_KEY",
+      "GOOGLE_GENERATIVE_AI_API_KEY",
+      "GEMINI_API_KEY"
+    ],
+    "models": {}
+  },
+  "google-vertex": {
+    "id": "google-vertex",
+    "name": "Vertex",
+    "npm": "@ai-sdk/google-vertex",
+    "env": [
+      "GOOGLE_VERTEX_PROJECT",
+      "GOOGLE_VERTEX_LOCATION",
+      "GOOGLE_APPLICATION_CREDENTIALS"
+    ],
+    "models": {}
+  },
+  "groq": {
+    "id": "groq",
+    "name": "Groq",
+    "npm": "@ai-sdk/groq",
+    "env": [
+      "GROQ_API_KEY"
+    ],
+    "models": {}
+  },
+  "lmstudio": {
+    "id": "lmstudio",
+    "name": "LMStudio",
+    "api": "http://127.0.0.1:1234/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "LMSTUDIO_API_KEY"
+    ],
+    "models": {}
+  },
+  "mistral": {
+    "id": "mistral",
+    "name": "Mistral",
+    "npm": "@ai-sdk/mistral",
+    "env": [
+      "MISTRAL_API_KEY"
+    ],
+    "models": {}
+  },
+  "ollama-cloud": {
+    "id": "ollama-cloud",
+    "name": "Ollama Cloud",
+    "api": "https://ollama.com/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "OLLAMA_API_KEY"
+    ],
+    "models": {}
+  },
+  "openai": {
+    "id": "openai",
+    "name": "OpenAI",
+    "npm": "@ai-sdk/openai",
+    "env": [
+      "OPENAI_API_KEY"
+    ],
+    "models": {}
+  },
+  "openrouter": {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "api": "https://openrouter.ai/api/v1",
+    "npm": "@openrouter/ai-sdk-provider",
+    "env": [
+      "OPENROUTER_API_KEY"
+    ],
+    "models": {}
+  },
+  "privatemode-ai": {
+    "id": "privatemode-ai",
+    "name": "Privatemode AI",
+    "api": "http://localhost:8080/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "PRIVATEMODE_API_KEY",
+      "PRIVATEMODE_ENDPOINT"
+    ],
+    "models": {}
+  },
+  "snowflake-cortex": {
+    "id": "snowflake-cortex",
+    "name": "Snowflake Cortex",
+    "api": "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/cortex/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "env": [
+      "SNOWFLAKE_ACCOUNT",
+      "SNOWFLAKE_CORTEX_PAT"
+    ],
+    "models": {}
+  },
+  "togetherai": {
+    "id": "togetherai",
+    "name": "Together AI",
+    "npm": "@ai-sdk/togetherai",
+    "env": [
+      "TOGETHER_API_KEY"
+    ],
+    "models": {}
+  },
+  "venice": {
+    "id": "venice",
+    "name": "Venice AI",
+    "npm": "venice-ai-sdk-provider",
+    "env": [
+      "VENICE_API_KEY"
+    ],
+    "models": {}
+  },
+  "watsonx": {
+    "id": "watsonx",
+    "name": "watsonx.ai",
+    "npm": "watsonx-ai-provider",
+    "env": [
+      "WATSONX_AI_APIKEY",
+      "WATSONX_AI_PROJECT_ID"
+    ],
+    "models": {}
+  },
+  "xai": {
+    "id": "xai",
+    "name": "xAI",
+    "npm": "@ai-sdk/xai",
+    "env": [
+      "XAI_API_KEY"
+    ],
+    "models": {}
+  }
+}

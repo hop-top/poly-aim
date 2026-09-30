@@ -1,0 +1,433 @@
+[
+  {
+    "description": "anthropic: first-party npm, no api",
+    "id": "anthropic",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "ANTHROPIC_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "anthropic",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "openai: first-party npm, no api",
+    "id": "openai",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "OPENAI_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "google: gemini alias, three key vars in catalog order",
+    "id": "google",
+    "expected": {
+      "aliases": [
+        "gemini"
+      ],
+      "key_vars": [
+        "GOOGLE_API_KEY",
+        "GOOGLE_GENERATIVE_AI_API_KEY",
+        "GEMINI_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "google",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "google-vertex: settings only, no key var",
+    "id": "google-vertex",
+    "expected": {
+      "aliases": [],
+      "key_vars": [],
+      "settings": [
+        "GOOGLE_VERTEX_PROJECT",
+        "GOOGLE_VERTEX_LOCATION",
+        "GOOGLE_APPLICATION_CREDENTIALS"
+      ],
+      "local": false,
+      "protocol": "google-vertex",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "openrouter: own npm package, api set",
+    "id": "openrouter",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "OPENROUTER_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openrouter",
+      "base_url": "https://openrouter.ai/api/v1"
+    }
+  },
+  {
+    "description": "groq: first-party npm, no api",
+    "id": "groq",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "GROQ_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "groq",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "xai: first-party npm, no api",
+    "id": "xai",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "XAI_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "xai",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "togetherai: together alias",
+    "id": "togetherai",
+    "expected": {
+      "aliases": [
+        "together"
+      ],
+      "key_vars": [
+        "TOGETHER_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "togetherai",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "fireworks-ai: fireworks alias, api kept verbatim",
+    "id": "fireworks-ai",
+    "expected": {
+      "aliases": [
+        "fireworks"
+      ],
+      "key_vars": [
+        "FIREWORKS_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://api.fireworks.ai/inference/v1/"
+    }
+  },
+  {
+    "description": "deepseek: openai-compatible",
+    "id": "deepseek",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "DEEPSEEK_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://api.deepseek.com"
+    }
+  },
+  {
+    "description": "mistral: first-party npm",
+    "id": "mistral",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "MISTRAL_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "mistral",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "lmstudio: 127.0.0.1 is local",
+    "id": "lmstudio",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "LMSTUDIO_API_KEY"
+      ],
+      "settings": [],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://127.0.0.1:1234/v1"
+    }
+  },
+  {
+    "description": "ollama-cloud: remote, not local",
+    "id": "ollama-cloud",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "OLLAMA_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://ollama.com/v1"
+    }
+  },
+  {
+    "description": "amazon-bedrock: secret access key is a key var; key id, region, bearer token are settings",
+    "id": "amazon-bedrock",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "AWS_SECRET_ACCESS_KEY"
+      ],
+      "settings": [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_REGION",
+        "AWS_BEARER_TOKEN_BEDROCK"
+      ],
+      "local": false,
+      "protocol": "amazon-bedrock",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "azure: resource name setting, api key var",
+    "id": "azure",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "AZURE_API_KEY"
+      ],
+      "settings": [
+        "AZURE_RESOURCE_NAME"
+      ],
+      "local": false,
+      "protocol": "azure",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "cloudflare-ai-gateway: _TOKEN key var, unknown npm",
+    "id": "cloudflare-ai-gateway",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "CLOUDFLARE_API_TOKEN"
+      ],
+      "settings": [
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CLOUDFLARE_GATEWAY_ID"
+      ],
+      "local": false,
+      "protocol": "",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "privatemode-ai: localhost is local, endpoint is a setting",
+    "id": "privatemode-ai",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "PRIVATEMODE_API_KEY"
+      ],
+      "settings": [
+        "PRIVATEMODE_ENDPOINT"
+      ],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://localhost:8080/v1"
+    }
+  },
+  {
+    "description": "digitalocean: _ACCESS_TOKEN is a key var",
+    "id": "digitalocean",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "DIGITALOCEAN_ACCESS_TOKEN"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://inference.do-ai.run/v1"
+    }
+  },
+  {
+    "description": "abliteration-ai: bare _KEY suffix is a key var",
+    "id": "abliteration-ai",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "ABLIT_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://api.abliteration.ai/v1"
+    }
+  },
+  {
+    "description": "venice: unknown third-party npm stays empty",
+    "id": "venice",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "VENICE_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "watsonx: _APIKEY suffix is a key var, project id a setting",
+    "id": "watsonx",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "WATSONX_AI_APIKEY"
+      ],
+      "settings": [
+        "WATSONX_AI_PROJECT_ID"
+      ],
+      "local": false,
+      "protocol": "",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "IPv6 loopback is local",
+    "id": "example-ipv6-loopback",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_IPV6_API_KEY"
+      ],
+      "settings": [],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://[::1]:8000/v1"
+    }
+  },
+  {
+    "description": "any 127/8 address is local",
+    "id": "example-loopback-range",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_RANGE_API_KEY"
+      ],
+      "settings": [],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://127.1.2.3:9000/v1"
+    }
+  },
+  {
+    "description": "localhost matches case-insensitively",
+    "id": "example-localhost-upper",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_UPPER_API_KEY"
+      ],
+      "settings": [],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://LOCALHOST:11434/v1"
+    }
+  },
+  {
+    "description": ".localhost subdomain is local (RFC 6761)",
+    "id": "example-localhost-subdomain",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_SUB_API_KEY"
+      ],
+      "settings": [],
+      "local": true,
+      "protocol": "openai-compatible",
+      "base_url": "http://llm.localhost:8080/v1"
+    }
+  },
+  {
+    "description": "localhost as a label of a public name is not local",
+    "id": "example-localhost-lookalike",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_LOOKALIKE_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://localhost.example.com/v1"
+    }
+  },
+  {
+    "description": "0.0.0.0 is unspecified, not loopback",
+    "id": "example-unspecified-addr",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_UNSPEC_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "http://0.0.0.0:8000/v1"
+    }
+  },
+  {
+    "description": "no npm and no api: empty protocol and base URL, not local",
+    "id": "example-bare",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "EXAMPLE_BARE_API_KEY"
+      ],
+      "settings": [],
+      "local": false,
+      "protocol": "",
+      "base_url": ""
+    }
+  },
+  {
+    "description": "snowflake-cortex: _PAT suffix is a key var, account a setting, templated api kept verbatim",
+    "id": "snowflake-cortex",
+    "expected": {
+      "aliases": [],
+      "key_vars": [
+        "SNOWFLAKE_CORTEX_PAT"
+      ],
+      "settings": [
+        "SNOWFLAKE_ACCOUNT"
+      ],
+      "local": false,
+      "protocol": "openai-compatible",
+      "base_url": "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/cortex/v1"
+    }
+  }
+]
