@@ -51,7 +51,7 @@ func TestFactor1Introspection(t *testing.T) {
 	// — see "factor 1 follow-up" in the test report).
 	requiredAll := []string{
 		"path", "short", "side_effect", "idempotent",
-		"output_schema_version", "examples", "top_level_verb",
+		"output_schema_version", "examples",
 	}
 	adopterLeaves := map[string]struct{}{
 		"aim list":      {},
@@ -78,6 +78,14 @@ func TestFactor1Introspection(t *testing.T) {
 		for _, key := range requiredAll {
 			if _, ok := c[key]; !ok {
 				t.Errorf("manifest.commands[%s] missing required field %q (spec §1.3)", pathStr, key)
+			}
+		}
+		// top_level_verb marks depth-1 leaves only; kit omits it on
+		// nested ones (e.g. `spec coverage`), so require it only
+		// directly under the root.
+		if len(pathSeg) == 2 {
+			if tlv, _ := c["top_level_verb"].(bool); !tlv {
+				t.Errorf("manifest.commands[%s] missing top_level_verb on a depth-1 leaf (spec §1.3)", pathStr)
 			}
 		}
 		// Long is required on adopter leaves; kit-shipped `spec`
