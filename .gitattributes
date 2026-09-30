@@ -1,0 +1,61 @@
+# >>> kit-managed: gitattributes >>>
+# Default: text files normalize to LF, binary detection is automatic.
+* text=auto eol=lf
+
+# Explicit text formats — collapse cross-platform CRLF noise.
+*.md          text eol=lf
+*.mdx         text eol=lf
+*.yaml        text eol=lf
+*.yml         text eol=lf
+*.json        text eol=lf
+*.toml        text eol=lf
+*.sh          text eol=lf
+*.bash        text eol=lf
+*.bats        text eol=lf
+Dockerfile    text eol=lf
+*.Dockerfile  text eol=lf
+Makefile      text eol=lf
+*.proto       text eol=lf
+
+# Explicit binary — never line-end-translate or diff.
+*.png         binary
+*.jpg         binary
+*.jpeg        binary
+*.gif         binary
+*.ico         binary
+*.pdf         binary
+*.zip         binary
+*.tar.gz      binary
+*.tgz         binary
+*.woff        binary
+*.woff2       binary
+
+# Vendored docs — exclude from language stats.
+docs/**       linguist-documentation=true
+# Go
+*.go              text eol=lf
+**/*.pb.go        linguist-generated=true
+**/*.gen.go       linguist-generated=true
+go.sum            linguist-generated=true
+# TypeScript / Node
+*.ts                      text eol=lf
+*.tsx                     text eol=lf
+*.js                      text eol=lf
+*.jsx                     text eol=lf
+pnpm-lock.yaml            linguist-generated=true
+**/package-lock.json      linguist-generated=true
+**/yarn.lock              linguist-generated=true
+**/*_pb.ts                linguist-generated=true
+# Python
+*.py              text eol=lf
+**/*_pb.py        linguist-generated=true
+**/uv.lock        linguist-generated=true
+poetry.lock       linguist-generated=true
+# Rust
+*.rs              text eol=lf
+Cargo.toml        text eol=lf
+Cargo.lock        linguist-generated=true
+# PHP
+*.php             text eol=lf
+composer.lock     linguist-generated=true
+# <<< kit-managed: gitattributes <<<
