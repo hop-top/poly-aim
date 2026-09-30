@@ -27,6 +27,25 @@ reg := aim.NewRegistry()
 models, err := reg.Models(ctx, aim.Filter{Input: []string{"image"}})
 ```
 
+## Provider facts
+
+Aliases, credential env vars vs settings, local (loopback) or not,
+protocol and default base URL, derived from the catalog:
+
+```go
+p, ok, err := reg.Provider(ctx, "gemini") // id or alias
+if err != nil || !ok { ... }
+
+p.ID          // "google"
+p.KeyVars()   // ["GOOGLE_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GEMINI_API_KEY"]
+p.IsLocal()   // false
+p.Protocol()  // "google"
+
+aim.CanonicalProviderID("together") // "togetherai"; no catalog needed
+```
+
+Rules for each fact: [library.md](https://github.com/hop-top/poly-aim/blob/main/docs/manual/library.md#provider-facts).
+
 ## Docs
 
 Source, issues and the full manual live in the monorepo,
