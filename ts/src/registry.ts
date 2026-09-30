@@ -3,7 +3,7 @@ import { ModelsDevSource } from './source.ts'
 import { parseQuery } from './query.ts'
 
 // NOTE: XDG cache is skipped for the TS port — uses in-memory cache only
-// (fetch once per Registry instance). See testdata/xdg.md for XDG algorithm
+// (fetch once per Registry instance). See spec/xdg.md for XDG algorithm
 // used by Go and Python ports.
 
 export interface RegistryOptions {

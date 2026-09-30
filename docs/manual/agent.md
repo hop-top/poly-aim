@@ -101,7 +101,7 @@ Every error returns the same shape on stderr:
 }
 ```
 
-Stable error codes (see [`internal/errs/errs.go`](../../internal/errs/errs.go)
+Stable error codes (see [`internal/errs/errs.go`](../../go/internal/errs/errs.go)
 for the full catalog):
 
 | Code | Exit | Meaning |
@@ -185,7 +185,7 @@ annotations are exposed in `aim spec --format json`.
 ## Verify the contract
 
 ```sh
-go test -run TestGenerateReport ./internal/conformance/...
+make conformance
 ```
 
 Regenerates [`docs/12-factor-conformance.md`](../12-factor-conformance.md)

@@ -12,7 +12,7 @@ usage() {
   cat >&2 <<EOF
 usage: $0 [<component>] [<target-stage>]
 
-  <component>     package key (".", "py", "ts", "rs", "php"),
+  <component>     package key ("go", "py", "ts", "rs", "php"),
                   component name ("aim", "aim-py", ...), or "all"
                   (default: all)
   <target-stage>  alpha | beta | rc | release (optional; interactive if omitted)
@@ -40,7 +40,7 @@ component_exists() {
   jq -e --arg c "$1" '.packages | has($c)' "$CONFIG" >/dev/null
 }
 
-# resolve_component accepts either the package key (".", "py", ...) or the
+# resolve_component accepts either the package key ("go", "py", ...) or the
 # component name ("aim", "aim-py", ...) and prints the canonical package key.
 resolve_component() {
   local input="$1"
@@ -62,7 +62,7 @@ resolve_component() {
 }
 
 # current_stage prints the prerelease-type stage label (alpha|beta|rc|release)
-# for a single package key (e.g. "." or "py"). "release" means no prerelease-type
+# for a single package key (e.g. "go" or "py"). "release" means no prerelease-type
 # is set (stable channel).
 current_stage() {
   local c="$1"

@@ -44,11 +44,11 @@ func buildRoot(t *testing.T) *cli.Root {
 	return root
 }
 
-// fixtureServer serves the testdata/api-fixture.json payload at /api.json.
+// fixtureServer serves the spec/fixtures/api-fixture.json payload at /api.json.
 func fixtureServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("..", "..", "testdata", "api-fixture.json"))
-	require.NoError(t, err, "read testdata/api-fixture.json")
+	data, err := os.ReadFile(filepath.Join("..", "..", "..", "spec", "fixtures", "api-fixture.json"))
+	require.NoError(t, err, "read spec/fixtures/api-fixture.json")
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write(data)

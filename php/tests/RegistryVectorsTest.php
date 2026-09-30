@@ -14,7 +14,7 @@ final class RegistryVectorsTest extends TestCase
     /** @return iterable<array{0:string, 1:Filter, 2:list<string>}> */
     public static function vectors(): iterable
     {
-        $raw = file_get_contents(__DIR__ . '/../../testdata/registry-vectors.json');
+        $raw = file_get_contents(__DIR__ . '/../../spec/fixtures/registry-vectors.json');
         self::assertIsString($raw);
         $data = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
         foreach ($data as $v) {
@@ -52,7 +52,7 @@ final class RegistryVectorsTest extends TestCase
 
     private static function sourceFromFixture(): ModelsDevSource
     {
-        $body = file_get_contents(__DIR__ . '/../../testdata/api-fixture.json');
+        $body = file_get_contents(__DIR__ . '/../../spec/fixtures/api-fixture.json');
         $mock = new \GuzzleHttp\Handler\MockHandler([new \GuzzleHttp\Psr7\Response(200, [], $body)]);
         $client = new \GuzzleHttp\Client(['handler' => \GuzzleHttp\HandlerStack::create($mock)]);
         return new ModelsDevSource(client: $client, url: 'http://fixture/api.json');

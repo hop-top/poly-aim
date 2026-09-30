@@ -1,4 +1,4 @@
-// Cross-SDK parser vectors driven by testdata/query-vectors.json.
+// Cross-SDK parser vectors driven by spec/fixtures/query-vectors.json.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
@@ -8,8 +8,8 @@ import { parseQuery } from './query.ts'
 import type { Filter } from './types.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
-// ts/src/ → ts/ → <repo>/ → <repo>/testdata/query-vectors.json
-const fixture = join(here, '..', '..', 'testdata', 'query-vectors.json')
+// ts/src/ → ts/ → <repo>/ → <repo>/spec/fixtures/query-vectors.json
+const fixture = join(here, '..', '..', 'spec', 'fixtures', 'query-vectors.json')
 
 interface Vector {
   description: string

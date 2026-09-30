@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// providerFactsVector is one entry in testdata/provider-facts-vectors.json.
+// providerFactsVector is one entry in spec/fixtures/provider-facts-vectors.json.
 type providerFactsVector struct {
 	Description string `json:"description"`
 	ID          string `json:"id"`
@@ -24,7 +24,7 @@ type providerFactsVector struct {
 	} `json:"expected"`
 }
 
-// providerLookupVector is one entry in testdata/provider-lookup-vectors.json.
+// providerLookupVector is one entry in spec/fixtures/provider-lookup-vectors.json.
 type providerLookupVector struct {
 	Description string `json:"description"`
 	Name        string `json:"name"`
@@ -42,7 +42,7 @@ func loadJSON(t *testing.T, path string, v any) {
 func providerFixture(t *testing.T) map[string]*Provider {
 	t.Helper()
 	var providers map[string]*Provider
-	loadJSON(t, "testdata/provider-fixture.json", &providers)
+	loadJSON(t, "../spec/fixtures/provider-fixture.json", &providers)
 	require.NotEmpty(t, providers)
 	for key, p := range providers {
 		require.Equal(t, key, p.ID, "fixture map key must equal provider id")
@@ -71,7 +71,7 @@ func orEmpty(s []string) []string {
 func TestProviderFacts_Vectors(t *testing.T) {
 	providers := providerFixture(t)
 	var vectors []providerFactsVector
-	loadJSON(t, "testdata/provider-facts-vectors.json", &vectors)
+	loadJSON(t, "../spec/fixtures/provider-facts-vectors.json", &vectors)
 	require.Len(t, vectors, len(providers), "one facts vector per fixture provider")
 
 	for _, v := range vectors {
@@ -92,7 +92,7 @@ func TestProviderFacts_Vectors(t *testing.T) {
 func TestRegistryProvider_LookupVectors(t *testing.T) {
 	reg := providerRegistry(t)
 	var vectors []providerLookupVector
-	loadJSON(t, "testdata/provider-lookup-vectors.json", &vectors)
+	loadJSON(t, "../spec/fixtures/provider-lookup-vectors.json", &vectors)
 	require.NotEmpty(t, vectors)
 
 	for _, v := range vectors {
@@ -140,7 +140,7 @@ func TestRegistryProvider_CatalogIDWinsOverAlias(t *testing.T) {
 
 func TestCanonicalProviderID_LookupVectors(t *testing.T) {
 	var vectors []providerLookupVector
-	loadJSON(t, "testdata/provider-lookup-vectors.json", &vectors)
+	loadJSON(t, "../spec/fixtures/provider-lookup-vectors.json", &vectors)
 	for _, v := range vectors {
 		t.Run(v.Description, func(t *testing.T) {
 			want := v.Name // unknown names come back unchanged
@@ -192,7 +192,7 @@ func TestProviderFacts_SlicesAreCopies(t *testing.T) {
 	assert.Equal(t, []string{"X_API_KEY", "X_REGION"}, p.Env)
 }
 
-// providerProtocolVector is one entry in testdata/provider-protocol-vectors.json.
+// providerProtocolVector is one entry in spec/fixtures/provider-protocol-vectors.json.
 type providerProtocolVector struct {
 	Description string `json:"description"`
 	NPM         string `json:"npm"`
@@ -201,7 +201,7 @@ type providerProtocolVector struct {
 
 func TestProviderProtocol_Vectors(t *testing.T) {
 	var vectors []providerProtocolVector
-	loadJSON(t, "testdata/provider-protocol-vectors.json", &vectors)
+	loadJSON(t, "../spec/fixtures/provider-protocol-vectors.json", &vectors)
 	covered := map[string]bool{}
 	for _, v := range vectors {
 		covered[v.NPM] = true
@@ -219,7 +219,7 @@ func TestProviderProtocol_Vectors(t *testing.T) {
 // ports carry the same overlay.
 func TestProviderAliases_AllPinned(t *testing.T) {
 	var vectors []providerLookupVector
-	loadJSON(t, "testdata/provider-lookup-vectors.json", &vectors)
+	loadJSON(t, "../spec/fixtures/provider-lookup-vectors.json", &vectors)
 	pinned := map[string]string{}
 	for _, v := range vectors {
 		if v.Found && v.Name != v.ExpectedID {

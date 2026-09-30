@@ -20,7 +20,7 @@ on:
       - 'rs/Cargo.toml'
       - 'composer.json'
       - 'php/composer.json'
-      - 'go.mod'
+      - 'go/go.mod'
   workflow_dispatch: {}
 
 jobs:

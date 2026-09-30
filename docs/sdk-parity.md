@@ -23,10 +23,10 @@ touching SDK type files.
 
 ## Shared fixture coverage
 
-- `testdata/query-vectors.json` — exercised by all 5 SDKs (Go via existing tests).
-- `testdata/registry-vectors.json` — exercised by all 5 SDKs.
-- `testdata/api-fixture.json` — shared catalog for registry tests.
-- `testdata/provider-fixture.json` + `provider-{facts,lookup,protocol}-vectors.json`
+- `spec/fixtures/query-vectors.json` — exercised by all 5 SDKs (Go via existing tests).
+- `spec/fixtures/registry-vectors.json` — exercised by all 5 SDKs.
+- `spec/fixtures/api-fixture.json` — shared catalog for registry tests.
+- `spec/fixtures/provider-fixture.json` + `provider-{facts,lookup,protocol}-vectors.json`
   — provider facts (aliases, key vars, local, protocol, base URL); Go
   only so far, ports pending.
 
@@ -58,7 +58,7 @@ Or via the script directly:
   serialization handles the wire). Wire-format parity holds.
 - **Tristate notation**: `*bool` (Go), `Optional[bool]` (py),
   `boolean | undefined` (ts), `Option<bool>` (rs), `?bool` (php).
-  Documented in `aim.go` package comment.
+  Documented in `go/aim.go` package comment.
 - **ts mixed-case**: `Model` uses snake_case (matches JSON wire),
   `Filter` uses camelCase. New fields follow the same convention.
   This is the only intentional naming asymmetry across SDKs.

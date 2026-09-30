@@ -13,7 +13,7 @@ final class QueryVectorsTest extends TestCase
     /** @return iterable<array{0:string, 1:string, 2:?Filter, 3:bool}> */
     public static function vectors(): iterable
     {
-        $raw = file_get_contents(__DIR__ . '/../../testdata/query-vectors.json');
+        $raw = file_get_contents(__DIR__ . '/../../spec/fixtures/query-vectors.json');
         self::assertIsString($raw);
         $data = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
         foreach ($data as $i => $v) {

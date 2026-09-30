@@ -47,10 +47,10 @@ func primeCache(t *testing.T, payload []byte) string {
 	return dir
 }
 
-// fixturePayload reads testdata/api-fixture.json from the repo root.
+// fixturePayload reads spec/fixtures/api-fixture.json from the repo root.
 func fixturePayload(t *testing.T) []byte {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("..", "..", "testdata", "api-fixture.json"))
+	data, err := os.ReadFile(filepath.Join("..", "..", "..", "spec", "fixtures", "api-fixture.json"))
 	if err != nil {
 		t.Fatalf("read fixture: %v", err)
 	}

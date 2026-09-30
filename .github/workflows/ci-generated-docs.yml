@@ -9,43 +9,43 @@ on:
   push:
     branches: [main]
     paths:
-      - "internal/conformance/**"
-      - "internal/cmd/**"
-      - "internal/cli/**"
-      - "internal/apiversion/**"
-      - "internal/errs/**"
-      - "cmd/aim/**"
+      - "go/internal/conformance/**"
+      - "go/internal/cmd/**"
+      - "go/internal/cli/**"
+      - "go/internal/apiversion/**"
+      - "go/internal/errs/**"
+      - "go/cmd/aim/**"
       - "docs/schema-changelog.md"
       - "docs/12-factor-conformance.md"
-      - "aim.go"
+      - "go/aim.go"
       - "py/src/**"
       - "ts/src/**"
       - "rs/src/**"
       - "php/src/**"
-      - "testdata/query-vectors.json"
-      - "testdata/registry-vectors.json"
-      - "testdata/api-fixture.json"
+      - "spec/fixtures/query-vectors.json"
+      - "spec/fixtures/registry-vectors.json"
+      - "spec/fixtures/api-fixture.json"
       - "scripts/verify-sdk-parity.sh"
       - "docs/sdk-parity.md"
   pull_request:
     branches: [main]
     paths:
-      - "internal/conformance/**"
-      - "internal/cmd/**"
-      - "internal/cli/**"
-      - "internal/apiversion/**"
-      - "internal/errs/**"
-      - "cmd/aim/**"
+      - "go/internal/conformance/**"
+      - "go/internal/cmd/**"
+      - "go/internal/cli/**"
+      - "go/internal/apiversion/**"
+      - "go/internal/errs/**"
+      - "go/cmd/aim/**"
       - "docs/schema-changelog.md"
       - "docs/12-factor-conformance.md"
-      - "aim.go"
+      - "go/aim.go"
       - "py/src/**"
       - "ts/src/**"
       - "rs/src/**"
       - "php/src/**"
-      - "testdata/query-vectors.json"
-      - "testdata/registry-vectors.json"
-      - "testdata/api-fixture.json"
+      - "spec/fixtures/query-vectors.json"
+      - "spec/fixtures/registry-vectors.json"
+      - "spec/fixtures/api-fixture.json"
       - "scripts/verify-sdk-parity.sh"
       - "docs/sdk-parity.md"
 
@@ -61,7 +61,8 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version-file: go.mod
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.sum
 
       - name: Regenerate docs/12-factor-conformance.md
         run: make conformance
@@ -116,7 +117,7 @@ jobs:
           # and shared fixtures. Exclude release-please artifacts
           # (CHANGELOG.md, version manifests) which live under the
           # same per-SDK directories but don't affect parity content.
-          input_pattern='^(aim\.go|py/src/|ts/src/|rs/src/|php/src/|testdata/(query|registry)-vectors\.json|testdata/api-fixture\.json|scripts/verify-sdk-parity\.sh)'
+          input_pattern='^(go/aim\.go|py/src/|ts/src/|rs/src/|php/src/|spec/fixtures/(query|registry)-vectors\.json|spec/fixtures/api-fixture\.json|scripts/verify-sdk-parity\.sh)'
           touched_inputs=$(echo "$changed" | grep -E "$input_pattern" || true)
           touched_doc=$(echo "$changed" | grep -E '^docs/sdk-parity\.md$' || true)
           if [ -n "$touched_inputs" ] && [ -z "$touched_doc" ]; then

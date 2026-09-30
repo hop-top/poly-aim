@@ -7,7 +7,7 @@ independently:
 
 | Path  | Component | Tag prefix     | Channel    |
 |-------|-----------|----------------|------------|
-| `.`   | `aim`     | `aim/v...`     | go module  |
+| `go/` | `aim`     | `aim/v...`     | go module  |
 | `py/` | `aim-py`  | `aim-py/v...`  | PyPI       |
 | `ts/` | `aim-ts`  | `aim-ts/v...`  | npm        |
 | `rs/` | `aim-rs`  | `aim-rs/v...`  | crates.io  |
@@ -15,8 +15,8 @@ independently:
 
 Commit scopes are detected by file path. A commit touching
 `py/src/hop/aim/types.py` opens a release-pending PR for `aim-py` only;
-`rs/src/types.rs` opens one for `aim-rs`. The Go module (`.`) is bumped
-by commits anywhere outside `py/`, `ts/`, `rs/`, `php/`.
+`rs/src/types.rs` opens one for `aim-rs`. The Go module (`go/`) is bumped
+by commits under `go/`.
 
 For coordinated releases across all five components, manually open
 release PRs for each component via release-please's `release-pr` action

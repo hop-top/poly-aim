@@ -10,8 +10,8 @@ import (
 
 // Provider facts are derived from the catalog fields of a [Provider]; none
 // needs a network call. The derivation rules are pinned by the shared
-// conformance fixtures testdata/provider-fixture.json and
-// testdata/provider-facts-vectors.json, which every SDK port runs.
+// conformance fixtures spec/fixtures/provider-fixture.json and
+// spec/fixtures/provider-facts-vectors.json, which every SDK port runs.
 
 // providerAliases is the curated alias overlay: alias -> models.dev
 // provider id. Aliases cover names other tools use for a catalog provider.

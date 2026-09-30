@@ -15,30 +15,30 @@ export GOFLAGS := -buildvcs=false
         dev-up dev-down dev-exec dev-rebuild dev-status dev-logs \
         release-dry release-validate promote
 
-# --- Go (canonical) ---
+# --- Go (canonical; module lives in go/) ---
 
 build:
-	go build -o bin/aim ./cmd/aim
+	cd go && go build -o ../bin/aim ./cmd/aim
 
 test test-go:
-	go test ./...
+	cd go && go test ./...
 
 test-verbose:
-	go test -v ./...
+	cd go && go test -v ./...
 
 lint lint-go:
-	go vet ./...
+	cd go && go vet ./...
 	@if command -v golangci-lint >/dev/null 2>&1; then \
-		golangci-lint run ./...; \
+		cd go && golangci-lint run ./...; \
 	else \
 		echo "lint-go: golangci-lint not installed (CI uses v2.12.2); 'mise install' to enable"; \
 	fi
 
 smoke:
-	go test -tags smoke ./...
+	cd go && go test -tags smoke ./...
 
 install:
-	go install ./cmd/aim
+	cd go && go install ./cmd/aim
 
 # --- Python (uv + pytest + ruff) ---
 
@@ -224,8 +224,8 @@ parity:
 # docs/12-factor-conformance.md. Commit both the test results and the
 # regenerated report.
 conformance:
-	go test -count=1 -run TestFactor ./internal/conformance/...
-	go test -count=1 -run TestGenerateReport ./internal/conformance/...
+	cd go && go test -count=1 -run TestFactor ./internal/conformance/...
+	cd go && go test -count=1 -run TestGenerateReport ./internal/conformance/...
 
 # check stays Go-only (cheap pre-commit gate).
 # check-all gates on every language + parity (slower, pre-merge).

@@ -259,14 +259,14 @@ func TestKnownCommandsStillDispatch(t *testing.T) {
 // x-release-please-version annotation and is rewritten by the release PR.
 // This test is what proves the annotation is still wired up.
 func TestVersionMatchesReleaseManifest(t *testing.T) {
-	raw, err := os.ReadFile(filepath.Join("..", "..", ".github", ".release-please-manifest.json"))
+	raw, err := os.ReadFile(filepath.Join("..", "..", "..", ".github", ".release-please-manifest.json"))
 	require.NoError(t, err, "release-please manifest must be readable")
 
 	var manifest map[string]string
 	require.NoError(t, json.Unmarshal(raw, &manifest))
 
-	want, ok := manifest["."]
-	require.True(t, ok, `manifest must carry a "." entry for the Go module`)
+	want, ok := manifest["go"]
+	require.True(t, ok, `manifest must carry a "go" entry for the Go module`)
 	assert.Equal(t, want, aimVersion,
 		"aimVersion drifted from the release manifest; the "+
 			"x-release-please-version annotation on the constant and the "+
