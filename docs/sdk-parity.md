@@ -19,12 +19,16 @@ touching SDK type files.
 | parse_query        | ✓       | ✓       | ✓       | ✓       | ✓        |
 | ModelsDevSource    | ✓       | ✓       | ✓       | ✓       | ✓        |
 | Registry           | ✓       | ✓       | ✓       | ✓       | ✓        |
+| Provider facts     | ✓       | —       | —       | —       | —        |
 
 ## Shared fixture coverage
 
 - `testdata/query-vectors.json` — exercised by all 5 SDKs (Go via existing tests).
 - `testdata/registry-vectors.json` — exercised by all 5 SDKs.
 - `testdata/api-fixture.json` — shared catalog for registry tests.
+- `testdata/provider-fixture.json` + `provider-{facts,lookup,protocol}-vectors.json`
+  — provider facts (aliases, key vars, local, protocol, base URL); Go
+  only so far, ports pending.
 
 ## Test parity
 

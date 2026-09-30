@@ -1,0 +1,127 @@
+[
+  {
+    "description": "@ai-sdk/openai-compatible -> openai-compatible",
+    "npm": "@ai-sdk/openai-compatible",
+    "expected": "openai-compatible"
+  },
+  {
+    "description": "@ai-sdk/openai -> openai",
+    "npm": "@ai-sdk/openai",
+    "expected": "openai"
+  },
+  {
+    "description": "@ai-sdk/anthropic -> anthropic",
+    "npm": "@ai-sdk/anthropic",
+    "expected": "anthropic"
+  },
+  {
+    "description": "@ai-sdk/google -> google",
+    "npm": "@ai-sdk/google",
+    "expected": "google"
+  },
+  {
+    "description": "@ai-sdk/google-vertex -> google-vertex",
+    "npm": "@ai-sdk/google-vertex",
+    "expected": "google-vertex"
+  },
+  {
+    "description": "@ai-sdk/google-vertex/anthropic -> google-vertex-anthropic",
+    "npm": "@ai-sdk/google-vertex/anthropic",
+    "expected": "google-vertex-anthropic"
+  },
+  {
+    "description": "@ai-sdk/amazon-bedrock -> amazon-bedrock",
+    "npm": "@ai-sdk/amazon-bedrock",
+    "expected": "amazon-bedrock"
+  },
+  {
+    "description": "@ai-sdk/azure -> azure",
+    "npm": "@ai-sdk/azure",
+    "expected": "azure"
+  },
+  {
+    "description": "@ai-sdk/mistral -> mistral",
+    "npm": "@ai-sdk/mistral",
+    "expected": "mistral"
+  },
+  {
+    "description": "@ai-sdk/groq -> groq",
+    "npm": "@ai-sdk/groq",
+    "expected": "groq"
+  },
+  {
+    "description": "@ai-sdk/xai -> xai",
+    "npm": "@ai-sdk/xai",
+    "expected": "xai"
+  },
+  {
+    "description": "@ai-sdk/togetherai -> togetherai",
+    "npm": "@ai-sdk/togetherai",
+    "expected": "togetherai"
+  },
+  {
+    "description": "@ai-sdk/cerebras -> cerebras",
+    "npm": "@ai-sdk/cerebras",
+    "expected": "cerebras"
+  },
+  {
+    "description": "@ai-sdk/cohere -> cohere",
+    "npm": "@ai-sdk/cohere",
+    "expected": "cohere"
+  },
+  {
+    "description": "@ai-sdk/deepinfra -> deepinfra",
+    "npm": "@ai-sdk/deepinfra",
+    "expected": "deepinfra"
+  },
+  {
+    "description": "@ai-sdk/perplexity -> perplexity",
+    "npm": "@ai-sdk/perplexity",
+    "expected": "perplexity"
+  },
+  {
+    "description": "@ai-sdk/gateway -> gateway",
+    "npm": "@ai-sdk/gateway",
+    "expected": "gateway"
+  },
+  {
+    "description": "@ai-sdk/vercel -> vercel",
+    "npm": "@ai-sdk/vercel",
+    "expected": "vercel"
+  },
+  {
+    "description": "@openrouter/ai-sdk-provider -> openrouter",
+    "npm": "@openrouter/ai-sdk-provider",
+    "expected": "openrouter"
+  },
+  {
+    "description": "no npm package",
+    "npm": "",
+    "expected": ""
+  },
+  {
+    "description": "third-party package, not known",
+    "npm": "venice-ai-sdk-provider",
+    "expected": ""
+  },
+  {
+    "description": "third-party package, not known",
+    "npm": "ai-gateway-provider",
+    "expected": ""
+  },
+  {
+    "description": "unlisted @ai-sdk package is not guessed",
+    "npm": "@ai-sdk/some-future-provider",
+    "expected": ""
+  },
+  {
+    "description": "match is exact",
+    "npm": "@AI-SDK/OPENAI",
+    "expected": ""
+  },
+  {
+    "description": "trailing space is not trimmed",
+    "npm": "@ai-sdk/openai-compatible ",
+    "expected": ""
+  }
+]

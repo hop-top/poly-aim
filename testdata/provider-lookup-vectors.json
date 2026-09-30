@@ -1,0 +1,62 @@
+[
+  {
+    "description": "canonical id",
+    "name": "google",
+    "found": true,
+    "expected_id": "google"
+  },
+  {
+    "description": "alias gemini",
+    "name": "gemini",
+    "found": true,
+    "expected_id": "google"
+  },
+  {
+    "description": "alias together",
+    "name": "together",
+    "found": true,
+    "expected_id": "togetherai"
+  },
+  {
+    "description": "alias fireworks",
+    "name": "fireworks",
+    "found": true,
+    "expected_id": "fireworks-ai"
+  },
+  {
+    "description": "canonical id with a hyphen",
+    "name": "fireworks-ai",
+    "found": true,
+    "expected_id": "fireworks-ai"
+  },
+  {
+    "description": "canonical id without an alias",
+    "name": "deepseek",
+    "found": true,
+    "expected_id": "deepseek"
+  },
+  {
+    "description": "lookup is case-sensitive",
+    "name": "Gemini",
+    "found": false,
+    "expected_id": ""
+  },
+  {
+    "description": "ollama is not an alias of ollama-cloud",
+    "name": "ollama",
+    "found": false,
+    "expected_id": ""
+  },
+  {
+    "description": "unknown name",
+    "name": "nope",
+    "found": false,
+    "expected_id": ""
+  },
+  {
+    "description": "empty name",
+    "name": "",
+    "found": false,
+    "expected_id": ""
+  }
+]

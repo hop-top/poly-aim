@@ -109,6 +109,53 @@ models, err := reg.Query(ctx, f, freeText)
 Or compose programmatically — full DSL grammar in
 [query-syntax.md](query-syntax.md).
 
+## Provider facts
+
+Facts about a provider, derived from its catalog entry. No network call
+beyond loading the catalog; alias resolution needs no catalog at all.
+
+```go
+p, ok, err := reg.Provider(ctx, "gemini") // id or alias
+if err != nil || !ok { ... }
+
+p.ID          // "google" — canonical models.dev id
+p.Aliases()   // ["gemini"]
+p.KeyVars()   // ["GOOGLE_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GEMINI_API_KEY"]
+p.Settings()  // [] — non-credential env vars (region, project, ...)
+p.IsLocal()   // false — true when p.API is on a loopback host
+p.Protocol()  // "google"
+p.API         // "" — default base URL; empty when the SDK package knows it
+```
+
+| Fact | Rule |
+|------|------|
+| `Aliases()` | curated overlay: `fireworks` → `fireworks-ai`, `gemini` → `google`, `together` → `togetherai` |
+| `KeyVars()` | `Env` names ending `_KEY` (so also `_API_KEY`), `_APIKEY`, `_PAT` or `_TOKEN`, catalog order (first = preferred) |
+| `Settings()` | every other `Env` name, catalog order |
+| `IsLocal()` | `API` host is `localhost`, `*.localhost`, or a loopback IP (`127.0.0.0/8`, `::1`); key optional |
+| `Protocol()` | from `NPM`: `@ai-sdk/<name>` → `<name>` for listed packages, `@openrouter/ai-sdk-provider` → `openrouter`; unlisted → `""` |
+| `API` | the catalog `api` field, verbatim; may hold `${VAR}` placeholders naming a setting |
+
+Without a catalog (offline, cold cache), resolve names statically:
+
+```go
+aim.CanonicalProviderID("together") // "togetherai"; unknown names unchanged
+aim.ProviderAliases("google")       // ["gemini"]; accepts an alias too
+```
+
+`Registry.Provider` prefers a catalog id over an alias of the same
+name. Multi-variable providers (Bedrock, Azure, Vertex) are classified
+by the same rule; interpreting their settings is left to the caller.
+For example Bedrock's `AWS_BEARER_TOKEN_BEDROCK` and `AWS_ACCESS_KEY_ID`
+are settings (no key suffix), `AWS_SECRET_ACCESS_KEY` is a key var, and
+Vertex's `GOOGLE_APPLICATION_CREDENTIALS` (a file path) is a setting.
+
+Conformance fixtures shared by every SDK:
+`testdata/provider-fixture.json` (input catalog),
+`testdata/provider-facts-vectors.json`,
+`testdata/provider-lookup-vectors.json`,
+`testdata/provider-protocol-vectors.json`.
+
 ## Custom source
 
 Implement `Source` to feed from an internal registry or static file:

@@ -52,6 +52,9 @@ A read-mostly client for the models.dev catalog with three surfaces:
 - **Library** — `import "hop.top/aim"` and use the same cache, source,
   and query semantics from your own program. Polyglot: Go (canonical),
   Python, TypeScript, Rust, PHP.
+  Includes provider facts — aliases, credential env vars vs settings,
+  local (loopback) or not, protocol, default base URL — derived from
+  the catalog; see [library.md](docs/manual/library.md#provider-facts).
 
 ## Why aim
 
