@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0-alpha.6](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.5...aim/v0.1.0-alpha.6) (2026-09-30)
+
+
+### Features
+
+* **provider:** derive provider facts from catalog ([95a3d07](https://github.com/hop-top/poly-aim/commit/95a3d07edbdc5c8ac9d503a8c0ebd352e64d8c57))
+
 ## [0.1.0-alpha.5](https://github.com/hop-top/poly-aim/compare/aim/v0.1.0-alpha.4...aim/v0.1.0-alpha.5) (2026-09-04)
 
 
