@@ -20,6 +20,8 @@ polyglot library API.
 
 Module: `hop.top/aim` · Go 1.26+ · MIT.
 
+> **Status:** Active development. Usable today, with some rough edges as features evolve.
+
 ## Pick your path
 
 | You want to… | Go to |
